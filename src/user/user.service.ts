@@ -17,23 +17,8 @@ export class UserService {
 
   async createUser(dto: CreateUserDto) {
 
-    try {
-      const userExist = await this.userRepository.findOne({ where: { email: dto.email } });
-      if (userExist) {
-        throw new ConflictException('User already exist');
-      }
-      const hashedPassword = AppUtilities.hashPassword(dto.password);
-
-      const user = await this.userRepository.create({
-        ...dto,
-        password: hashedPassword
-      });
-      return await this.userRepository.save(user);
-    } catch (error) {
-      console.log(error);
-      throw new Error('Something went wrong');
-    }
-
+    const user = this.userRepository.create(dto);
+    return await this.userRepository.save(user);
   }
 
   getAllUsers() {
@@ -42,6 +27,11 @@ export class UserService {
 
   public async getUesrbyId(id: string) {
     const user = await this.userRepository.findOne({ where: { id : id } });
+    return user;
+  }
+
+  public async getUserByEmail(email: string) {
+    const user = await this.userRepository.findOne({ where: { email : email } });
     return user;
   }
 
