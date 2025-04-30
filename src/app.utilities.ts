@@ -26,6 +26,25 @@ export class AppUtilities {
     return bcrypt.compare(password, hash);
   }
 
+  public static generateToken(len?: number): string {
+    return crypto.randomBytes(len || 32).toString('hex');
+  }
+
+  public static hashToken(token: string, userId?: string): string {
+    return crypto
+      .createHash('sha256')
+      .update(token + (userId || ''))
+      .digest('hex');
+  }
+
+  public static exp1hr(): number {
+    return Date.now() + 3600 * 1000;
+  }
+
+  public static genUuid() {
+    return v4();
+  }
+
 
  
 

@@ -1,3 +1,4 @@
+import { Token } from 'src/token/entities/token.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -36,5 +37,8 @@ export class User extends AbstractBaseEntity {
 
   @Column({ nullable: true })
   is_verified_date: Date;
+
+  @OneToMany(() => Token, (token) => token.user)
+  tokens: Token[];
 
 }

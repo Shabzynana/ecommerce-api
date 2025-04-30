@@ -2,6 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import { User } from 'src/user/entities/user.entity';
+import { Token } from 'src/token/entities/token.entity';
 // import { User } from 'src/modules/user/entites/user.entity';
 // import { Post } from 'src/modules/post/entities/post.entity';
 // import { Comment } from 'src/modules/comment/entities/comment.entity';
@@ -17,7 +18,7 @@ const dataSource = new DataSource({
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,
   database: process.env.DB_NAME,
-  entities: [User],
+  entities: [User, Token],
   migrations: [process.env.DB_MIGRATIONS],
   synchronize: isDevelopment,
   migrationsTableName: 'migrations',
