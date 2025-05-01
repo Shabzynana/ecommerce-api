@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from 'src/user/user.module';
@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { TokenService } from 'src/token/token.service';
 import { Token } from 'src/token/entities/token.entity';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -17,10 +18,10 @@ import { Token } from 'src/token/entities/token.entity';
     JwtModule.register({
       global: true,
     }),
-    UserModule,
-
+    forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, TokenService],
+  providers: [AuthService, JwtStrategy, TokenService, JwtAuthGuard],
+  exports: [JwtAuthGuard],
 })
 export class AuthModule {}
