@@ -9,7 +9,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { UserLoginDto } from './dto/auth.dto';
+import { resendConfirmationMailDto, UserLoginDto } from './dto/auth.dto';
 
 
 @Injectable()
@@ -87,6 +87,19 @@ export class AuthService {
             throw new Error('Incorrect password');
         }
         return await this.signToken(userExist.id);
+    }
+
+    async resendMail(dto: resendConfirmationMailDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+        if (!user) {
+            throw new Error('User does not exist');
+        }
+        if (user.is_verified) {
+            throw new Error('User is already verified');
+        }
+        await this.emailService.sendConfirmationEmail(user);
+
+        return {message: 'Email sent successfully'}
     }
 
 

@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
-import { UserLoginDto } from './dto/auth.dto';
+import { resendConfirmationMailDto, UserLoginDto } from './dto/auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -17,5 +17,10 @@ export class AuthController {
   @Post('login')
   async login(@Body()dto: UserLoginDto) {
     return await this.authService.login(dto);
+  }
+
+  @Post('resend-confirmation-mail')
+  async resendMail(@Body() dto: resendConfirmationMailDto) {
+    return await this.authService.resendMail(dto);
   }
 }

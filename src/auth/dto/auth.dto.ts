@@ -9,5 +9,11 @@ export class UserLoginDto {
     @MinLength(6)
     @IsOptional()
     password: string;
-  }
+}
+
+export class resendConfirmationMailDto {
+  @IsString()
+  @IsEmail()
+  email: string;
+}
   
