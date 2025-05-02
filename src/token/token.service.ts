@@ -45,6 +45,10 @@ export class TokenService {
     return await this.createToken(token, TokenType.LOGIN);
   }
 
+  async generateConfirmationToken(userId: string) {
+    return await this.createToken({ userId: userId }, TokenType.VERIFY_EMAIL);
+  }
+
     
 
 

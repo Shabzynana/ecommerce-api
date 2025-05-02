@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
+import { EmailService } from 'src/email/email.service';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
@@ -24,7 +25,8 @@ export class AuthService {
         private userService: UserService,
         private jwtService: JwtService,
         private configService: ConfigService,
-        private tokenService: TokenService
+        private tokenService: TokenService,
+        private emailService: EmailService
     ) {
         this.jwtExpires = this.configService.get('jwt.expiresIn');
         this.jwtSecret = this.configService.get('jwt.secret');
@@ -67,7 +69,10 @@ export class AuthService {
             throw new Error('User already exists');
         }
         const hashedPassword =  await AppUtilities.hashPassword(dto.password)
-        const newUser = this.userService.createUser({...dto, password: hashedPassword});
+        const newUser = await this.userService.createUser({...dto, password: hashedPassword});
+        await this.emailService.sendConfirmationEmail(newUser);
+
+
         return newUser;
     }
 

@@ -11,6 +11,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { TokenService } from 'src/token/token.service';
 import { Token } from 'src/token/entities/token.entity';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EmailService } from 'src/email/email.service';
+import { QueueService } from 'src/common/queue/queue.service';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
     forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, TokenService, JwtAuthGuard],
+  providers: [AuthService, JwtStrategy, TokenService, JwtAuthGuard, EmailService, QueueService],
   exports: [JwtAuthGuard],
 })
 export class AuthModule {}

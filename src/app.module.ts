@@ -6,6 +6,8 @@ import { TokenModule } from './token/token.module';
 import dataSource from './database/data-source';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from 'config/configuration';
+import { BullConfigService } from 'config/bullConfigService';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -22,7 +24,9 @@ import { configuration } from 'config/configuration';
     }),
     UserModule, 
     AuthModule, 
-    TokenModule
+    TokenModule,
+    BullConfigService,
+    EmailModule
   ],
   controllers: [],
   providers: [],

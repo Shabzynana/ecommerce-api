@@ -1,5 +1,6 @@
 export const configuration = () => ({
     port: parseInt(process.env.APP_PORT, 10) || 3456,
+    appRoot: process.cwd(),
     hostname: process.env.APP_HOSTNAME || '0.0.0.0',
     host:
       process.env.APP_HOST || `http://localhost:${process.env.APP_PORT || 3456}`,
