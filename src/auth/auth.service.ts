@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { EmailService } from 'src/email/email.service';
+import { TokenType } from 'src/token/dto/token_type';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
@@ -100,6 +101,26 @@ export class AuthService {
         await this.emailService.sendConfirmationEmail(user);
 
         return {message: 'Email sent successfully'}
+    }
+
+    async confirmEmail(token: string) {
+        const tokenData = await this.tokenService.verifyToken(token, TokenType.VERIFY_EMAIL);
+        if (!tokenData) {
+            throw new Error('Invalid token');
+        }
+
+        const user = await this.userService.getUesrbyId(tokenData.userId);
+        if (!user) {
+            throw new Error('User does not exist');
+        }
+        if (user.is_verified) {
+            throw new Error('User is already verified');
+        }
+        user.is_verified = true;
+        user.is_verified_date = new Date();
+        await this.userRepository.save(user);
+        await this.emailService.welcomeEmail(user);
+        return {message: 'Email verified successfully'}
     }
 
 

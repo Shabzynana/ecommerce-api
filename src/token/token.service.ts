@@ -41,6 +41,24 @@ export class TokenService {
     return userToken;
   }
 
+  async verifyToken(token: string, token_type: TokenType) {
+    const tokenData = await this.tokenRepository.findOne({
+      where: {
+        access_token: token,
+        type: token_type,
+      },
+    });
+    if (!tokenData) {
+      throw new Error('Invalid token');
+    }
+
+    if (Date.now() > tokenData.expires_in) {
+      throw new Error('Token expired');
+    }
+    
+    return tokenData;
+  }
+
   async generateLoginToken(token: ITokenize) {
     return await this.createToken(token, TokenType.LOGIN);
   }

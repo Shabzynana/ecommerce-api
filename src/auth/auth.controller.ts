@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -22,5 +22,10 @@ export class AuthController {
   @Post('resend-confirmation-mail')
   async resendMail(@Body() dto: resendConfirmationMailDto) {
     return await this.authService.resendMail(dto);
+  }
+
+  @Get('confirm-email')
+  async confirmEmail(@Query('token') token: string) {
+    return await this.authService.confirmEmail(token);
   }
 }

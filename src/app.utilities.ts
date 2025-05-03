@@ -44,6 +44,7 @@ export class AppUtilities {
   public static genUuid() {
     return v4();
   }
+
   public static readFile(filePath: string) {
     return fs.readFileSync(filePath, 'utf8');
   }

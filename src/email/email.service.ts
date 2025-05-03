@@ -42,4 +42,23 @@ export class EmailService {
         }        
     }
 
+    async welcomeEmail(user:User) {
+        try {
+            const htmlTemplate = this.prepMailContent('welcome.html');
+            const htmlContent = htmlTemplate
+              .replace('{{username}}', user.last_name);
+            
+            const job = await this.queueService.addMailToQueue('welcomeEmail', {
+                to: user.email,
+                subject: 'Welcome Email',
+                html: htmlContent
+            })
+            console.log('Email added', job)
+
+        } catch (err) {
+            console.log(err, 'err')
+        }
+    }
+         
+
 }

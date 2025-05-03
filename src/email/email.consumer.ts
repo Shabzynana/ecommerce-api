@@ -14,6 +14,9 @@ export class EmailConsumer extends WorkerHost {
       case 'confirmEmail':
         await this.handleEmail(job);
         break;
+      case 'welcomeEmail':
+        await this.handleEmail(job);
+        break;  
       default:
         console.warn(`Unhandled job: ${job.name}`);  
     }
@@ -22,10 +25,10 @@ export class EmailConsumer extends WorkerHost {
 
   private async handleEmail(job: Job) {
     try {
-      await this.mailer.sendMail({
-      to: job.data.to,
-      subject: job.data.subject,
-      html: job.data.html
+      await this.mailer.sendMail({   
+        to: job.data.to,
+        subject: job.data.subject,
+        html: job.data.html
       });
       console.log({'Job ID:': job.id, '✅ Mail sent to:': job.data.to, 'Job Name:': job.name});
     } catch (err) {
