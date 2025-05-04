@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class ProductDto {
 
@@ -17,8 +17,9 @@ export class ProductDto {
 
     @IsNumber()
     stock?: number;
-
+    
     @IsString()
+    @IsUUID()
     category: string;
 
 }
