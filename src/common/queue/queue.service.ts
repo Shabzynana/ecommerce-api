@@ -13,7 +13,6 @@ export class QueueService {
   async addMailToQueue(type: string, payload: any) {
     try {
       const job = await this.sendMail.add(type, payload, {
-        removeOnComplete: true,
         attempts: 1,
         backoff: 5000,
       });

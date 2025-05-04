@@ -8,6 +8,11 @@ import { ConfigModule } from '@nestjs/config';
 import { configuration } from 'config/configuration';
 import { BullConfigService } from 'config/bullConfigService';
 import { EmailModule } from './email/email.module';
+import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
+import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -26,7 +31,12 @@ import { EmailModule } from './email/email.module';
     AuthModule, 
     TokenModule,
     BullConfigService,
-    EmailModule
+    EmailModule,
+    ProductModule,
+    CategoryModule,
+    CartModule,
+    OrderModule,
+    PaymentModule
   ],
   controllers: [],
   providers: [],
