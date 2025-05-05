@@ -13,3 +13,19 @@ export class CategoryDto {
     imageUrl?: string;
 
 }
+
+export class updateCategoryDto {
+
+    @IsString()
+    @IsOptional()
+    name: string;
+
+    @IsString()
+    @IsOptional()
+    description: string;
+    
+    @IsString()
+    @IsOptional()
+    imageUrl?: string;
+
+}

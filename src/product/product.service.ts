@@ -23,12 +23,14 @@ export class ProductService {
   }
 
   async allProduct() {
-    return await this.productRepository.find();
+    return await this.productRepository.find({ relations: ['category'] });
   }
 
   async getProuctById(id: string) {
 
-    const product = await this.productRepository.findOne({ where: { id : id } });
+    const product = await this.productRepository.findOne(
+      { where: { id : id }, relations: ['category'] },
+    );
     if (!product) {
       throw new Error('Product not found');
     }

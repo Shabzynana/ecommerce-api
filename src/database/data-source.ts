@@ -28,8 +28,19 @@ const dataSource = new DataSource({
   ssl: process.env.DB_SSL === 'true',
 });
 export async function initializeDataSource() {
+  // if (!dataSource.isInitialized) {
+  //   await dataSource.initialize();
+  // }
+  // return dataSource;
+
   if (!dataSource.isInitialized) {
-    await dataSource.initialize();
+    try {
+      await dataSource.initialize();
+      console.log('✅ DataSource initialized successfully');
+    } catch (error) {
+      console.error('❌ Error initializing DataSource:', error);
+      throw error;
+    }
   }
   return dataSource;
 }

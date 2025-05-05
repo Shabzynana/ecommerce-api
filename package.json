@@ -24,7 +24,7 @@
     "premigration:run": "yarn run build",
     "migration:run": "yarn typeorm migration:run -d dist/src/database/data-source",
     "migration:revert": "npx typeorm migration:revert -d dist/src/database/data-source",
-    "seed": "ts-node src/seed.ts"
+    "seed:CategoryProduct": "ts-node --transpile-only -r tsconfig-paths/register src/database/seeding/seeder.ts"
   },
   "dependencies": {
     "@bull-board/express": "^6.9.2",
