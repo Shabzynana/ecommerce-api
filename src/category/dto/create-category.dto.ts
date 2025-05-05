@@ -1,33 +1,34 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength, minLength } from 'class-validator';
 
 export class CategoryDto {
 
     @IsString()
     @IsNotEmpty()
     name: string;
-
+    
+    @IsOptional()
     @IsString()
     description: string;
-    
-    @IsString()
+
     @IsOptional()
+    @IsString()
     imageUrl?: string;
 
 }
 
 export class updateCategoryDto {
 
-    @IsString()
-    @IsNotEmpty()
     @IsOptional()
-    name: string;
+    @IsString()
+    @MinLength(1)
+    name?: string;
 
-    @IsString()
     @IsOptional()
-    description: string;
+    @IsString() 
+    description?: string;
     
-    @IsString()
     @IsOptional()
+    @IsString()
     imageUrl?: string;
 
 }

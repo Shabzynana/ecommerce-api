@@ -24,7 +24,7 @@ export class CategoryService {
   async getCategoryById(id: string) {
     const category = await this.categoryRepository.findOne({ where: { id : id } });
     if (!category) {
-      throw new Error('Category not found');
+      throw new BadRequestException('Category not found');
     }
     return category;
   }
@@ -50,5 +50,21 @@ export class CategoryService {
     const category = await this.getCategoryById(id);
     await this.categoryRepository.remove(category);
     return 'Category deleted successfully'
+  }
+
+  async productCategory(name: string) {
+
+    const category = await this.getCategoryByName(name);
+    if (!category) {
+      throw new BadRequestException('Category not found');
+    }
+    
+    const product = await this.categoryRepository.find({
+      where: { id: category.id },
+      relations: ['products'],
+    });
+
+    return product;
+
   }
 }
