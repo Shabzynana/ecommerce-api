@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { Repository } from 'typeorm';
-import { CreateTokenDto } from './dto/create-token.dto';
 import { TokenType } from './dto/token_type';
-import { UpdateTokenDto } from './dto/update-token.dto';
 import { Token } from './entities/token.entity';
 import { ITokenize } from './interfaces/token.interface';
 
@@ -49,11 +47,11 @@ export class TokenService {
       },
     });
     if (!tokenData) {
-      throw new Error('Invalid token');
+      throw new UnauthorizedException('Invalid token');
     }
 
     if (Date.now() > tokenData.expires_in) {
-      throw new Error('Token expired');
+      throw new UnauthorizedException('Token expired');
     }
     
     return tokenData;
