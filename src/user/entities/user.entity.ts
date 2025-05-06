@@ -1,3 +1,4 @@
+import { Address } from 'src/address/entities/address.entity';
 import { Cart } from 'src/cart/entities/cart.entity';
 import { Order } from 'src/order/entities/order.entity';
 import { Payment } from 'src/payment/entities/payment.entity';
@@ -50,34 +51,5 @@ export class User extends AbstractBaseEntity {
 
   @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[];
-
-}
-
-@Entity('addresses')
-export class Address extends AbstractBaseEntity {
-
-  @Column()
-  street: string;
-
-  @Column()
-  city: string;
-
-  @Column()
-  state: string;
-
-  @Column()
-  country: string;
-
-  @Column()
-  zipCode?: string;
-
-  @Column({ nullable: true })
-  phoneNumber?: string;
-
-  @Column({ nullable: true })
-  additionalInfo?: string;
-
-  @ManyToOne(() => User, (user) => user.addresses)
-  user: User;
 
 }

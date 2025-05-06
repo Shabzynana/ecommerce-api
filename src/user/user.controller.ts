@@ -15,7 +15,7 @@ export class UserController {
   async getUserProfile(@Req() req) {
     const { sub } = req.user;
     console.log(sub, 'idd')
-    return this.userService.getUesrbyId(sub);
+    return this.userService.getUserById(sub);
   }
 
   

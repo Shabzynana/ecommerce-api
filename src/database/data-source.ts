@@ -1,13 +1,14 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
-import { Address, User } from 'src/user/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { Token } from 'src/token/entities/token.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { Cart, CartItem } from 'src/cart/entities/cart.entity';
 import { Order, OrderItem } from 'src/order/entities/order.entity';
 import { Payment } from 'src/payment/entities/payment.entity';
+import { Address } from 'src/address/entities/address.entity';
 
 
 dotenv.config();

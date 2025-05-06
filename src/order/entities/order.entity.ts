@@ -1,7 +1,8 @@
+import { Address } from 'src/address/entities/address.entity';
 import { AbstractBaseEntity } from 'src/database/base.entity';
 import { Payment } from 'src/payment/entities/payment.entity';
 import { Product } from 'src/product/entities/product.entity';
-import { Address, User } from 'src/user/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 
