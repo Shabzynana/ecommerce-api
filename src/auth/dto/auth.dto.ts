@@ -7,7 +7,6 @@ export class UserLoginDto {
   
     @IsString()
     @MinLength(6)
-    @IsOptional()
     password: string;
 }
 

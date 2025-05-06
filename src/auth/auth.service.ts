@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -67,25 +67,23 @@ export class AuthService {
     async register(dto: CreateUserDto) {
         const user = await this.userService.getUserByEmail(dto.email);
         if (user) {
-            throw new Error('User already exists');
+            throw new NotFoundException('User already exists');
         }
         const hashedPassword =  await AppUtilities.hashPassword(dto.password)
         const newUser = await this.userService.createUser({...dto, password: hashedPassword});
         await this.emailService.sendConfirmationEmail(newUser);
-
-
         return newUser;
     }
 
     async login(dto: UserLoginDto) {
         const userExist = await this.userService.getUserByEmail(dto.email);
         if (!userExist) {
-            throw new Error('User does not exist');
+            throw new NotFoundException('User does not exist');
         }
 
         const isPasswordCorrect = await AppUtilities.comparePassword(dto.password, userExist.password);
         if (!isPasswordCorrect) {
-            throw new Error('Incorrect password');
+            throw new UnauthorizedException('Incorrect password');
         }
         return await this.signToken(userExist.id);
     }
@@ -93,10 +91,10 @@ export class AuthService {
     async resendMail(dto: resendConfirmationMailDto) {
         const user = await this.userService.getUserByEmail(dto.email);
         if (!user) {
-            throw new Error('User does not exist');
+            throw new NotFoundException('User does not exist');
         }
         if (user.is_verified) {
-            throw new Error('User is already verified');
+            throw new BadRequestException('User is already verified');
         }
         await this.emailService.sendConfirmationEmail(user);
 
@@ -106,15 +104,15 @@ export class AuthService {
     async confirmEmail(token: string) {
         const tokenData = await this.tokenService.verifyToken(token, TokenType.VERIFY_EMAIL);
         if (!tokenData) {
-            throw new Error('Invalid token');
+            throw new UnauthorizedException('Invalid token');
         }
 
-        const user = await this.userService.getUesrbyId(tokenData.userId);
+        const user = await this.userService.getUserById(tokenData.userId);
         if (!user) {
-            throw new Error('User does not exist');
+            throw new NotFoundException('User does not exist');
         }
         if (user.is_verified) {
-            throw new Error('User is already verified');
+            throw new BadRequestException('User is already verified');
         }
         user.is_verified = true;
         user.is_verified_date = new Date();
