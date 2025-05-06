@@ -39,7 +39,7 @@ export class CartService {
        relations: ['cartItems', 'cartItems.product'],
     });
     if (!cart) {
-      throw new Error('Cart not found');
+      throw new NotFoundException('Cart not found');
     }
     return cart;
   }
@@ -47,7 +47,7 @@ export class CartService {
   async addItemToCart(userId: string, dto: CreateCartItemDto ) {
     const product = await this.productRepository.findOneBy({ id: dto.productId });
     if (!product) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Product not found');
     }
 
     let cart = await this.getUserCart(userId);
