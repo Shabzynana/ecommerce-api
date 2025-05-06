@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryService } from 'src/category/category.service';
 import { Repository } from 'typeorm';
-import { ProductDto, updateProductDto } from './dto/create-product.dto';
+import { ProductDto, updateProductDto } from './dto/product.dto';
 import { Product } from './entities/product.entity';
 
 @Injectable()
@@ -52,13 +52,13 @@ export class ProductService {
 
     const product = await this.getProuctById(id);
     if (!product) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Product not found');
     }
 
     if (dto.category) {
       const category = await this.categoryService.getCategoryById(dto.category);
       if (!category) {
-        throw new Error('Category not found');
+        throw new NotFoundException('Category not found');
       }
       product.category = category;
     }
@@ -74,7 +74,7 @@ export class ProductService {
 
     const product = await this.getProuctById(id);
     if (!product) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Product not found');
     }
     return await this.productRepository.remove(product);
   }
