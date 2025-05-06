@@ -6,7 +6,7 @@ import { AppUtilities } from 'src/app.utilities';
 import { EmailService } from 'src/email/email.service';
 import { TokenType } from 'src/token/dto/token_type';
 import { TokenService } from 'src/token/token.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';

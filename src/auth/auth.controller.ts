@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from 'src/user/dto/user.dto';
 import { AuthService } from './auth.service';
 import { resendConfirmationMailDto, UserLoginDto } from './dto/auth.dto';
 

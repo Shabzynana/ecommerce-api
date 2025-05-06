@@ -2,8 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -21,8 +20,8 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  getAllUsers() {
-    return this.userRepository.find();
+  async getAllUsers() {
+    return await this.userRepository.find();
   }
  
 
@@ -36,7 +35,7 @@ export class UserService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number, updateUserDto: any) {
     return `This action updates a #${id} user`;
   }
 
