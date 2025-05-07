@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
-import { ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AddressService } from './address.service';
 import { CreateAddressDto, UpdateAddressDto } from './dto/address.dto';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}

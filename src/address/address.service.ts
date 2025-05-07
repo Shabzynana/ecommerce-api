@@ -31,7 +31,10 @@ export class AddressService {
     if (!userExists) {
       throw new NotFoundException('User not found');
     } 
-    return this.addressRepository.find({ where: { user: userExists }});
+    const addresses = await this.addressRepository.find({
+       where: { user: { id: userExists.id} }
+    });
+    return addresses
   }
 
   async getAddressById(id: string) {

@@ -39,22 +39,18 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-    console.log(token, 'token');
     if (!token) {
       throw new UnauthorizedException('No token provided');
     }
 
     try {
       let payload: any = await this.verifyAccessToken(token);
-      console.log(payload, '1111111');
-
       if (!payload || !payload.type) {
         throw new UnauthorizedException('Invalid token');
       }
 
       if (payload.type === TokenType.LOGIN) {
         payload = await this.verifyJwtToken(token);
-        console.log(payload, '2222222');
         if (!payload)
           throw new UnauthorizedException('JWT verification failed');
 
@@ -92,11 +88,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     try{
       const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('jwt.secret'),
-      });
-      console.log(payload, 'payload');
-  
+      });  
       return payload;
-
     } catch (err) {
       console.error('JWT verification failed:', err);
     }

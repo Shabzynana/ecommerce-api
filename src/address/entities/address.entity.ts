@@ -23,7 +23,7 @@ export class Address extends AbstractBaseEntity {
   @Column()
   country: string;
 
-  @Column()
+  @Column({ nullable: true })
   zipCode?: string;
 
   @Column({ nullable: true })

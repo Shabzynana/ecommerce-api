@@ -9,17 +9,17 @@ export class CreateAddressDto {
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     city: string;
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     state: string;
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     country: string;
 
     @IsOptional()
@@ -50,19 +50,19 @@ export class UpdateAddressDto  {
     @IsOptional()
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     city: string;
 
     @IsOptional()
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     state: string;
 
     @IsOptional()
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(3)
     country: string;
 
     @IsOptional()
