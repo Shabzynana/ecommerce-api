@@ -16,7 +16,7 @@ export class UpdateCartItemDto {
   cartItemId: string;
 
   @IsInt()
-  @Min(1)
+  @Min(0)
   quantity: number;
 }
 

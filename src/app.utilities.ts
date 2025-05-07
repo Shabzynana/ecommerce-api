@@ -49,6 +49,11 @@ export class AppUtilities {
     return fs.readFileSync(filePath, 'utf8');
   }
 
+  public static totalPrice(items: any[]) {
+    const total = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    return parseFloat(total.toFixed(2));
+  }
+
 
  
 

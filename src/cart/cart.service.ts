@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AppUtilities } from 'src/app.utilities';
 import { Product } from 'src/product/entities/product.entity';
 import { Repository } from 'typeorm';
 import { threadId } from 'worker_threads';
@@ -23,6 +24,7 @@ export class CartService {
       user: { id: userId },
     });
     return await this.cartRepository.save(cart);
+
   }
 
   async getCartItems(cartItenId: string) {
@@ -32,15 +34,21 @@ export class CartService {
     })
     return cartItem;
   }
+
+  async getCartById(cartId: string) {
+    
+    const cart = await this.cartRepository.findOne({
+       where: { id: cartId },
+       relations: ['cartItems', 'cartItems.product'],
+    });
+    return cart;
+  }
   
   async getUserCart(userId: string) {
     const cart = await this.cartRepository.findOne({
        where: { user: { id: userId } },
        relations: ['cartItems', 'cartItems.product'],
     });
-    if (!cart) {
-      throw new NotFoundException('Cart not found');
-    }
     return cart;
   }
 
@@ -54,19 +62,22 @@ export class CartService {
     if (!cart) {
       cart = await this.createCart(userId);
     }
-    const cartItem = new CartItem();
-    cartItem.quantity = dto.quantity;
-    cartItem.cart = cart;
-    cartItem.product = product;
-    cart.cartItems.push(cartItem);
+
+    const cartItem = await this.cartItemRepository.create({
+      product,
+      quantity: dto.quantity,
+      cart: { id: cart.id },
+    })
+    await this.cartItemRepository.save(cartItem);
+    cart = await this.getCartById(cart.id);
+    cart.totalAmount = AppUtilities.totalPrice(cart.cartItems);
     await this.cartRepository.save(cart);
-    return cart;
+    return this.getUserCart(userId);
   }
 
   async updateCartItem(userId: string , dto: UpdateCartItemDto) {
 
     const cartItem = await this.getCartItems(dto.cartItemId);
-
     if (!cartItem) {
       throw new NotFoundException('Cart item not found');
     }
@@ -75,8 +86,16 @@ export class CartService {
       throw new ForbiddenException('You are not authorized to update this cart item');
     }
 
-    cartItem.quantity = dto.quantity;
-    await this.cartItemRepository.save(cartItem);
+    if (dto.quantity <= 0) {
+      await this.cartItemRepository.remove(cartItem);
+    } else {
+      cartItem.quantity = dto.quantity;
+      await this.cartItemRepository.save(cartItem);
+    }
+
+    const cart = await this.getCartById(cartItem.cart.id);
+    cart.totalAmount = AppUtilities.totalPrice(cart.cartItems);
+    await this.cartRepository.save(cart);
     return this.getUserCart(userId);
    
   }
@@ -86,10 +105,15 @@ export class CartService {
     if (!cartItem) {
       throw new NotFoundException('Cart item not found');
     }
+
     if (cartItem.cart.user.id !== userId) {
       throw new ForbiddenException('You are not authorized to delete this cart item');
     }
     await this.cartItemRepository.remove(cartItem);
+
+    const cart = await this.getCartById(cartItem.cart.id);
+    cart.totalAmount = AppUtilities.totalPrice(cart.cartItems);
+    await this.cartRepository.save(cart);
     return this.getUserCart(userId);
   }
 

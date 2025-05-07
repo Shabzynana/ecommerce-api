@@ -73,14 +73,19 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   private async verifyAccessToken(token: string) {
-    return await this.tokenRepository.findOne({
-      where: {
-        access_token: token,
-      },
-      relations: {
-        user: true,
-      },
-    })
+    try {
+      return await this.tokenRepository.findOne({
+        where: {
+          access_token: token,
+        },
+        relations: {
+          user: true,
+        },
+      })
+    } catch (err) {
+      console.error('Access token verification failed:', err);
+    }
+    
   }
 
   private async verifyJwtToken(token: string) {

@@ -42,7 +42,7 @@ export class CartController {
     return this.cartService.updateCartItem(sub, dto);
   }
 
-  @Delete('delete-item')
+  @Delete('delete-item/:cartItemId')
   @ApiOperation({ summary: 'Remove an item from the user\'s cart' })
   async emoveItemFromCart(@Req() req, @Param('cartItemId') cartItemId: string) {
 
