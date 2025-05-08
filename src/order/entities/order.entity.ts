@@ -36,10 +36,10 @@ export class Order extends AbstractBaseEntity {
   @OneToMany(() => Payment, (payment) => payment.order)
   payments: Payment[];
 
-  @ManyToOne(() => Address)
+  @ManyToOne(() => Address, { eager: true })
   shippingAddress: Address;
 
-  @Column({ nullable: true })
+  @Column({ unique : true })
   trackingNumber?: string;
 
   @Column({ nullable: true })

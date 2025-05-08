@@ -27,6 +27,11 @@ export class CartService {
 
   }
 
+  async emptyCart(cartId: string) {
+    const cart = await this.getCartById(cartId);
+    return await this.cartRepository.remove(cart);
+  }
+
   async getCartItems(cartItenId: string) {
     const cartItem = await this.cartItemRepository.findOne({
        where: { id: cartItenId },

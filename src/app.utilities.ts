@@ -54,6 +54,20 @@ export class AppUtilities {
     return parseFloat(total.toFixed(2));
   }
 
+  public static generateTrackingNumber() {
+    return crypto.randomBytes(7).toString('hex');
+  }
+  
+  public static dateOnly () {
+
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+  }
+
+
 
  
 
