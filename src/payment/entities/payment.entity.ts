@@ -37,30 +37,34 @@ export class Payment extends AbstractBaseEntity {
 
   @Column({
     type: 'enum',
-    enum: PaymentMethod
+    enum: PaymentMethod,
+    nullable: true
   })
-  method: PaymentMethod;
+  method?: PaymentMethod;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   reference: string;
   
   @Column({ nullable: true })
-  accessCode: string;
+  accessCode?: string;
   
   @Column({ nullable: true })
-  authorizationCode: string;
-  
+  authorizationCode?: string;
+
   @Column({ nullable: true })
-  transactionId: string;
+  authorizationUrl?: string;
+  
+  @Column({ nullable: true, unique: true })
+  transactionId?: string;
   
   @Column({ nullable: true, type: 'json' })
-  metadata: Record<string, any>;
+  metadata?: Record<string, any>;
   
   @Column({ nullable: true })
-  currency: string = 'NGN';
+  currency?: string = 'NGN';
   
   @Column({ nullable: true })
-  customerCode: string;
+  customerCode?: string;
 
   @ManyToOne(() => Order, (order) => order.payments)
   order: Order;

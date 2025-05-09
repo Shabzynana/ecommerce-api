@@ -30,6 +30,12 @@ export const configuration = () => ({
       pass: process.env.REDIS_PASS,
       db: process.env.REDIS_DB || 'playlist-swap',
     },
+
+    paystack : {
+      secretKey: process.env.PAYSTACK_SECRET_KEY,
+      apiUrl: process.env.PAYSTACK_API_URL
+
+    }
   
   });
   
