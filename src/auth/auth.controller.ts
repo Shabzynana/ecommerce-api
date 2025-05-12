@@ -28,4 +28,9 @@ export class AuthController {
   async confirmEmail(@Query('token') token: string) {
     return await this.authService.confirmEmail(token);
   }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() dto: resendConfirmationMailDto) {
+    return await this.authService.forgotPassword(dto);
+  }
 }

@@ -65,6 +65,10 @@ export class TokenService {
     return await this.createToken({ userId: userId }, TokenType.VERIFY_EMAIL);
   }
 
+  async generateForgotPasswordToken(userId: string) {
+    return await this.createToken({ userId: userId }, TokenType.RESET_PASSWORD);
+  }
+
     
 
 

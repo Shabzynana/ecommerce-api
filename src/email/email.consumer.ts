@@ -16,7 +16,10 @@ export class EmailConsumer extends WorkerHost {
         break;
       case 'welcomeEmail':
         await this.handleEmail(job);
-        break;  
+        break;
+      case 'forgotPasswordEmail':
+        await this.handleEmail(job);
+        break;
       default:
         console.warn(`Unhandled job: ${job.name}`);  
     }

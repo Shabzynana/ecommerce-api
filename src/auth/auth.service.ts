@@ -121,5 +121,14 @@ export class AuthService {
         return {message: 'Email verified successfully'}
     }
 
+    async forgotPassword(dto: resendConfirmationMailDto) {
+        const user = await this.userService.getUserByEmail(dto.email);
+        if (!user) {
+            throw new NotFoundException('User does not exist');
+        }
+        await this.emailService.sendForgotPasswordEmail(user);
+        return {message: 'Email sent successfully'}
+    }
+
 
 }
