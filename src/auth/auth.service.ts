@@ -183,5 +183,13 @@ export class AuthService {
         }
     }
 
+    async logout(userId: string, token_type: string) {
 
+        const tokenType = token_type as TokenType;
+        await this.tokenService.deleteToken({userId, token_type: tokenType});
+        return {
+            message: 'Logout successfully'
+        }
+    }
+        
 }

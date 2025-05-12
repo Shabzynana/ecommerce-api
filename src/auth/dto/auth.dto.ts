@@ -40,5 +40,4 @@ export class changePasswordDto {
   @IsString()
   @IsNotEmpty()
   confirmPassword: string;
-}
-  
+} 

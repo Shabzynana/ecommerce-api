@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { Repository } from 'typeorm';
-import { refreshTokenDto } from './dto/token.dto';
+import { refreshTokenDto, TokenDto } from './dto/token.dto';
 import { TokenType } from './dto/token_type';
 import { Token } from './entities/token.entity';
 import { ITokenize } from './interfaces/token.interface';
@@ -95,6 +95,23 @@ export class TokenService {
     }
     
     return tokenData;
+  }
+
+  async deleteToken(dto: TokenDto) {
+    const tokenData = await this.getUserTokenByType(dto);
+    return await this.tokenRepository.remove(tokenData)
+  }
+
+  async getUserTokenByType(dto: TokenDto) {
+
+    const tokenData = await this.tokenRepository.find({
+      where: {
+        userId: dto.userId,
+        type: dto.token_type
+      }
+    })
+    if (!tokenData) throw new NotFoundException('Token not found');
+    return tokenData
   }
 
   async generateLoginToken(token: ITokenize) {
