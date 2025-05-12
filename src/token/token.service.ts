@@ -43,8 +43,19 @@ export class TokenService {
       userId: token.userId ? token.userId : null,
     } as Token;
 
-    const userToken = await this.tokenRepository.save(data);
-    return userToken;
+    const existingToken = await this.tokenRepository.findOne({
+      where: {
+        uuid: data.uuid,
+      },
+    })
+
+    if (existingToken) {
+      const updatedToken = await this.tokenRepository.merge(existingToken, data)
+      return await this.tokenRepository.save(updatedToken)
+    } else {
+      const userToken = await this.tokenRepository.save(data);
+      return userToken;
+    }
   }
 
   async verifyToken(token: string, token_type: TokenType) {
