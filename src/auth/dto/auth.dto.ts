@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 
 export class UserLoginDto {
     @IsString()
@@ -14,5 +14,16 @@ export class resendConfirmationMailDto {
   @IsString()
   @IsEmail()
   email: string;
+}
+
+export class resetPasswordDto {
+
+  @IsString()
+  @IsNotEmpty()
+  newPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  confirmPassword: string;
 }
   

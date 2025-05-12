@@ -67,6 +67,12 @@ export class AppUtilities {
     return `${year}${month}${day}`;
   }
 
+  public static compareString(value1: string, value2: string) {
+    if (value1 === value2) return true;
+
+    return false;
+  }
+
 
 
  

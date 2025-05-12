@@ -10,7 +10,7 @@ import { CreateUserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { resendConfirmationMailDto, UserLoginDto } from './dto/auth.dto';
+import { resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
 
 
 @Injectable()
@@ -128,6 +128,28 @@ export class AuthService {
         }
         await this.emailService.sendForgotPasswordEmail(user);
         return {message: 'Email sent successfully'}
+    }
+
+    async resetPassword(token: string, dto: resetPasswordDto) {
+
+        const tokenData = await this.tokenService.verifyToken(token, TokenType.RESET_PASSWORD);
+        if (!tokenData) {
+            throw new UnauthorizedException('Invalid token');
+        }
+        const user = await this.userService.getUserById(tokenData.userId);
+        if (!user) {
+            throw new NotFoundException('User does not exist');
+        }
+        const isMatch = await AppUtilities.compareString(dto.newPassword, dto.confirmPassword);
+        if (!isMatch) {
+            throw new BadRequestException('Passwords do not match');
+        }
+        const hashedPassword =  await AppUtilities.hashPassword(dto.newPassword)
+        user.password = hashedPassword;
+        await this.userRepository.save(user);
+        return {
+            message: 'Password reset successfully, please login with new password'
+        }
     }
 
 
