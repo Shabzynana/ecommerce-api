@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { refreshTokenDto } from 'src/token/dto/token.dto';
 import { CreateUserDto } from 'src/user/dto/user.dto';
 import { AuthService } from './auth.service';
-import { resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
+import { changePasswordDto, resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -43,5 +43,11 @@ export class AuthController {
   @Post('refresh-token')
   async refreshToken(@Body() dto: refreshTokenDto) {
     return await this.authService.refreshToken(dto);
+  }
+
+  @Post('change-password')
+  async changePassword(@Req() req, @Body() dto: changePasswordDto) {
+    const { sub } = req.user;
+    return await this.authService.changePassword(sub, dto);
   }
 }

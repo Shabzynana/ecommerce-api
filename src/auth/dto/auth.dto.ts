@@ -26,4 +26,19 @@ export class resetPasswordDto {
   @IsNotEmpty()
   confirmPassword: string;
 }
+
+export class changePasswordDto {
+
+  @IsString()
+  @IsNotEmpty()
+  oldPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  newPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  confirmPassword: string;
+}
   

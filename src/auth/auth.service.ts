@@ -11,7 +11,7 @@ import { CreateUserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
+import { changePasswordDto, resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
 
 
 @Injectable()
@@ -155,12 +155,32 @@ export class AuthService {
 
     async refreshToken(dto: refreshTokenDto) {
         const tokenData = await this.tokenService.verifyRefreshToken(dto);
+        console.log(tokenData)
         if (!tokenData) throw new UnauthorizedException('Invalid token');
 
         const user = await this.userService.getUserById(tokenData.userId);
+        console.log(user)
         if (!user) throw new NotFoundException('User does not exist');
 
         return await this.signToken(user.id, tokenData.uuid);
+    }
+
+    async changePassword(userId: string, dto: changePasswordDto) {
+        const user = await this.userService.getUserById(userId);
+        if (!user) throw new NotFoundException('User does not exist');
+
+        const isMatch = await AppUtilities.comparePassword(dto.oldPassword, user.password);
+        if (!isMatch) throw new BadRequestException('Old password is incorrect');
+
+        const isMatch2 = await AppUtilities.compareString(dto.newPassword, dto.confirmPassword);
+        if (!isMatch2) throw new BadRequestException('Passwords do not match');
+
+        const hashedPassword =  await AppUtilities.hashPassword(dto.newPassword)
+        user.password = hashedPassword;
+        await this.userRepository.save(user);
+        return {
+            message: 'Password changed successfully'
+        }
     }
 
 
