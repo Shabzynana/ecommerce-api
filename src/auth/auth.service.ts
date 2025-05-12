@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { EmailService } from 'src/email/email.service';
+import { refreshTokenDto } from 'src/token/dto/token.dto';
 import { TokenType } from 'src/token/dto/token_type';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/user/dto/user.dto';
@@ -150,6 +151,16 @@ export class AuthService {
         return {
             message: 'Password reset successfully, please login with new password'
         }
+    }
+
+    async refreshToken(dto: refreshTokenDto) {
+        const tokenData = await this.tokenService.verifyRefreshToken(dto);
+        if (!tokenData) throw new UnauthorizedException('Invalid token');
+
+        const user = await this.userService.getUserById(tokenData.userId);
+        if (!user) throw new NotFoundException('User does not exist');
+
+        return await this.signToken(user.id, tokenData.uuid);
     }
 
 

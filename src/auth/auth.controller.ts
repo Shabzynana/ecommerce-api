@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { refreshTokenDto } from 'src/token/dto/token.dto';
 import { CreateUserDto } from 'src/user/dto/user.dto';
 import { AuthService } from './auth.service';
 import { resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
@@ -37,5 +38,10 @@ export class AuthController {
   @Post('reset-password')
   async resetPassword(@Query('token') token: string, @Body() dto: resetPasswordDto) {
     return await this.authService.resetPassword(token, dto);
+  }
+
+  @Post('refresh-token')
+  async refreshToken(@Body() dto: refreshTokenDto) {
+    return await this.authService.refreshToken(dto);
   }
 }
