@@ -3,8 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from 'src/order/entities/order.entity';
 import { OrderService } from 'src/order/order.service';
 import { Repository } from 'typeorm';
-import { CreatePaymentDto } from './dto/payment.dto';
-import { Payment } from './entities/payment.entity';
+import { Payment, PaymentStatus } from './entities/payment.entity';
 
 @Injectable()
 export class PaymentService {
@@ -16,15 +15,23 @@ export class PaymentService {
   ) {}
   async savePayment(data: Partial<Payment>) {
 
-    const userPayment = await this.paymentRepository.findOne({ 
+    const existingPayment = await this.paymentRepository.findOne({ 
       where: { reference: data.reference } 
     })
-    if (userPayment) {
-      return userPayment
-    } else {
-      const payment = this.paymentRepository.create(data)
-      return this.paymentRepository.save(payment)
-    }  
+    if (existingPayment) {
+      if (existingPayment.status === PaymentStatus.SUCCESS) {
+        console.log('data already exist', 'success')
+        return existingPayment;
+      }
+  
+      const updated = this.paymentRepository.merge(existingPayment, data);
+      console.log('data already exist', 'updated')
+      return this.paymentRepository.save(updated);
+    }
+  
+    const newPayment = this.paymentRepository.create(data);
+    console.log('newPayment', 'data created')
+    return this.paymentRepository.save(newPayment);
   } 
 
   findAll() {

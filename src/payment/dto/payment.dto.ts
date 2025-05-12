@@ -1,10 +1,5 @@
 import { IsDecimal, IsString, IsUUID } from "class-validator";
 
-export class CreatePaymentDto {
-    @IsUUID()
-    orderId: string;
-}
-
 export class savePaymentDto {
   @IsUUID()
   paymentId: string;
