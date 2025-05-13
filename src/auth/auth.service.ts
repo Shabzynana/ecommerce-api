@@ -36,12 +36,12 @@ export class AuthService {
         this.refreshTokenSecret = this.configService.get('jwt.refreshSecret');
     }
 
-    async signToken(userId: string, uuid?: string) {
+    async signToken(userId: string, role: string, uuid?: string) {
         console.log(
             userId,
             uuid
         )
-        const payload = { sub: userId };
+        const payload = { sub: userId, role: role };
         const [access_token, refresh_token] = await Promise.all([
             this.jwtService.signAsync(payload, {
                 expiresIn: this.jwtExpires,
@@ -86,7 +86,7 @@ export class AuthService {
         if (!isPasswordCorrect) {
             throw new UnauthorizedException('Incorrect password');
         }
-        return await this.signToken(userExist.id);
+        return await this.signToken(userExist.id, userExist.role);
     }
 
     async resendMail(dto: resendConfirmationMailDto) {
