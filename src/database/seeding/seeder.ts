@@ -12,15 +12,25 @@ async function bootstrap() {
     const appContext = await NestFactory.createApplicationContext(SeedModule);
     const seeder = appContext.get(SeedService);
 
-  try {
-    await seeder.seedProductCategory();
-    console.log('✅ Seeding complete!');
-  } catch (error) {
-    console.error('❌ Seeding failed:', error);
-  } finally {
-    await appContext.close();
-  }
+    const arg = process.argv[2];
 
+    try {
+      switch (arg) {
+        case 'categoryProduct':
+          await seeder.seedProductCategory();
+          break;
+        case 'user':
+          await seeder.seedUser();
+          break;
+        default:
+          console.log('Invalid seed argument');
+          break;
+      }
+    } catch (error) {
+      console.error('❌ Seeding failed:', error);
+    } finally {
+      await appContext.close();
+    }
   
 }
 
