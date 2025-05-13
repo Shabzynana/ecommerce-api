@@ -1,3 +1,5 @@
+import { IsOptional, IsString, IsUUID } from "class-validator";
+
 export interface PaystackWebApi {
     endpoint: string;
     method: string;
@@ -15,3 +17,17 @@ export type CreateTransactionResponseDto = {
         reference: string 
     };
 };
+
+export class CreatePaymentDto {
+    @IsUUID()
+    orderId: string;
+}
+
+export class verifyPaymentDto {
+    @IsString()
+    reference: string;
+
+    @IsOptional()
+    @IsString()
+    trxref?: string;
+}

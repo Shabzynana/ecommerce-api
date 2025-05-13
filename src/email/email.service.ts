@@ -59,6 +59,27 @@ export class EmailService {
             console.log(err, 'err')
         }
     }
+
+    async sendForgotPasswordEmail(user:User) {
+        
+        try {
+            const token = await this.tokenService.generateForgotPasswordToken(user.id)
+            const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password?token=${token.access_token}`;
+            const htmlTemplate = this.prepMailContent('resetPassword.html');
+            const htmlContent = htmlTemplate
+              .replace('{{resetUrl}}', resetUrl)
+              .replace('{{username}}', user.last_name);
+            
+            const job = await this.queueService.addMailToQueue('forgotPasswordEmail', {
+                to: user.email,
+                subject: 'Reset Password',
+                html: htmlContent
+            })
+            console.log('Email added', job)
+        } catch (err) {
+            console.log(err, 'err')
+        }
+    }    
          
 
 }

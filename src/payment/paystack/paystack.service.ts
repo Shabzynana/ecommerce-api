@@ -4,13 +4,12 @@ import axios from 'axios';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { PaymentService } from '../payment.service';
-import { CreatePaymentDto } from '../dto/payment.dto';
 import { OrderService } from 'src/order/order.service';
 import { PaymentMethod, PaymentStatus } from '../entities/payment.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Order } from 'src/order/entities/order.entity';
 import { UserService } from 'src/user/user.service';
-import { CreateTransactionResponseDto, PaystackWebApi } from './dto/paystack.dto';
+import { CreatePaymentDto, CreateTransactionResponseDto, PaystackWebApi, verifyPaymentDto } from './dto/paystack.dto';
 
 @Injectable()
 export class PaystackService {
@@ -28,12 +27,10 @@ export class PaystackService {
   }
 
   private async fetchPaystackApi(dto: PaystackWebApi) {
-    const { endpoint, method, secretKey, body, queryParams } = dto;
+    const { endpoint, method, secretKey, body } = dto;
     
-    let url = `${this.paystackApiUrl}/${endpoint}`;
-    if (endpoint.includes("{reference}") && queryParams?.reference) {
-        url = url.replace("{reference}", queryParams.reference);
-    }
+    const url = `${this.paystackApiUrl}/${endpoint}`;
+
     const headers = {
       Authorization: `Bearer ${secretKey}`,
     };
@@ -44,7 +41,6 @@ export class PaystackService {
         url,
         headers,
         data: body,
-        params: queryParams,
       });
       if (response) {
         return response.data;
@@ -96,7 +92,64 @@ export class PaystackService {
     }
 
     throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
+  }
+  
+  async verifyPayment(dto: verifyPaymentDto ) {
+
+    let payment: any;
+    const paystackApi: PaystackWebApi = {
+      endpoint: `transaction/verify/${dto.reference}`,
+      method: 'GET',
+      secretKey: this.paystackSecretKey
+    };
+
+    const response = await this.fetchPaystackApi(paystackApi);
+    console.log(response, 'response');
+    if (response.status === true) {
+      payment = await this.paymentService.savePayment({
+        reference: response.data.reference,
+        transactionId: response.data.id,
+        authorizationCode : response.data.authorization.authorization_code,
+        amount: Math.round(response.data.amount / 100),
+        status: response.data.status as PaymentStatus,
+        method : response.data.channel as PaymentMethod
+      });
+    }
+
+    return payment;
+    
+  } 
+
+  async handleWebhook(body: any, signature: string) {
+    const hash = crypto
+      .createHmac('sha512', this.paystackSecretKey)
+      .update(JSON.stringify(body))
+      .digest('hex');
+
+    console.log(hash, 'hash');
+    console.log(signature, 'signature');  
+
+    if (hash !== signature) {
+      throw new HttpException('Invalid signature', HttpStatus.BAD_REQUEST);
+    }
+    console.log(body, 'body');
+
+    if (body.event === 'charge.success') {
+      const payment = await this.paymentService.savePayment({
+        reference: body.data.reference,
+        transactionId: body.data.id,
+        authorizationCode : body.data.authorization.authorization_code,
+        amount: Math.round(body.data.amount / 100),
+        status: body.data.status as PaymentStatus,
+        method : body.data.channel as PaymentMethod
+      });
+
+      return payment;
+    }
+
+    throw new HttpException('Invalid event', HttpStatus.BAD_REQUEST);
   }  
+
 
  
 }
