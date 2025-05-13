@@ -24,11 +24,12 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('BLOG')
-    .setDescription('Blog API description')
+    .setTitle('E-Commerce API')
+    .setDescription('E-Commerce API description')
     .setVersion('1.0')
     .addBearerAuth()
     .addServer(`http://127.0.0.1:${process.env.PORT}/`)
+    .addServer('https://ecommerce-api-7v2j.onrender.com/')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
