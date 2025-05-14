@@ -12,6 +12,11 @@ import {
 } from 'typeorm';
 import { AbstractBaseEntity } from '../../database/base.entity';
 
+export enum UserRole {
+  CUSTOMER = 'customer',
+  ADMIN = 'admin'
+}
+
 
 @Entity({ name: 'users' })
 export class User extends AbstractBaseEntity {
@@ -28,8 +33,12 @@ export class User extends AbstractBaseEntity {
   @Column({ nullable: true })
   password: string;
 
-  @Column({ default: 'customer' })
-  role: string;
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.CUSTOMER,
+  })
+  role: UserRole;
 
   @Column({ default: false })
   is_verified: boolean;

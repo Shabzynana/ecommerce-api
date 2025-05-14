@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { Category } from 'src/category/entities/category.entity';
 import { Product } from 'src/product/entities/product.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User, UserRole } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { categorySeedData, productSeedData } from './seed-data/Category-Product';
 import { userSeedData } from './seed-data/user';
@@ -69,6 +69,7 @@ export class SeedService {
     const userPromise = userSeedData.map(async (data) => {
       const hashedPassword = await AppUtilities.hashPassword(data.password)
       const user = this.userRepository.create({...data, password: hashedPassword});
+      user.role = UserRole.ADMIN;
       await this.userRepository.save(user);
     });
 

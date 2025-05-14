@@ -8,7 +8,7 @@ import { refreshTokenDto } from 'src/token/dto/token.dto';
 import { TokenType } from 'src/token/dto/token_type';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/user/dto/user.dto';
-import { User } from 'src/user/entities/user.entity';
+import { User, UserRole } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { changePasswordDto, resendConfirmationMailDto, resetPasswordDto, UserLoginDto } from './dto/auth.dto';
@@ -75,7 +75,7 @@ export class AuthService {
         }
         const hashedPassword =  await AppUtilities.hashPassword(dto.password)
         const user = await this.userService.createUser({...dto, password: hashedPassword});
-        user.role = 'admin';
+        user.role = UserRole.ADMIN;
         await this.userRepository.save(user);
         return user;
       }
