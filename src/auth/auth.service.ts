@@ -65,6 +65,21 @@ export class AuthService {
         return { access_token, refresh_token };     
     }
 
+    async createAdmin(dto: CreateUserDto) {
+        const hasAdmin = await this.userService.getUserByEmail(dto.email);
+        if (hasAdmin) {
+          if (hasAdmin.role === 'admin') {
+            throw new ForbiddenException('Admin already exists');
+          }
+          throw new ForbiddenException('User already exists');
+        }
+        const hashedPassword =  await AppUtilities.hashPassword(dto.password)
+        const user = await this.userService.createUser({...dto, password: hashedPassword});
+        user.role = 'admin';
+        await this.userRepository.save(user);
+        return user;
+      }
+
     async register(dto: CreateUserDto) {
         const user = await this.userService.getUserByEmail(dto.email);
         if (user) {

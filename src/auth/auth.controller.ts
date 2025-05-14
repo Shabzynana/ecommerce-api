@@ -11,6 +11,11 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post('create-admin')
+  async createAdmin(@Body() dto: CreateUserDto) {
+    return await this.authService.createAdmin(dto);
+  }
   
   @Post('register')
   async register(@Body()dto: CreateUserDto) {
