@@ -51,7 +51,7 @@ export class AdminController {
   
   @ApiOperation({ summary: 'Update product' })
   @Patch('product/update/:id')
-  updateProduct(@Param('id') id: string, @Body() dto: updateProductDto) {
+  async updateProduct(@Param('id') id: string, @Body() dto: updateProductDto) {
     return this.productService.updateProduct(id, dto);
   }
   
