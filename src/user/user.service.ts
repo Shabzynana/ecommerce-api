@@ -1,8 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppUtilities } from 'src/app.utilities';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpadateUserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -23,7 +23,6 @@ export class UserService {
   async getAllUsers() {
     return await this.userRepository.find();
   }
- 
 
   public async getUserById(id: string) {
     const user = await this.userRepository.findOne({ where: { id : id } });
@@ -35,14 +34,23 @@ export class UserService {
     return user;
   }
 
-  update(id: number, updateUserDto: any) {
-    return `This action updates a #${id} user`;
+  public async updateProfile(id: string, dto: UpadateUserDto) {
+    
+    const userExists = await this.getUserById(id);
+    if (!userExists) {
+      throw new NotFoundException('User not found');
+    }
+    const user = Object.assign(userExists, dto);
+    return await this.userRepository.save(user);
   }
 
-  deleteUserbyId(id: string) {
-    const user = this.userRepository.delete({ id : id});
-    return {
-      message: 'User deleted successfully',
+  public async deleteUser(id: string) {
+
+    const userExists = await this.getUserById(id);
+    if (!userExists) {
+      throw new NotFoundException('User not found');
     }
+    return await this.userRepository.remove(userExists);
+    
   }
 }
