@@ -6,11 +6,6 @@ import { ProductDto, updateProductDto } from './dto/product.dto';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post()
-  async createProduct(@Body() dto: ProductDto) {
-    return await this.productService.createProduct(dto);
-  }
-
   @Get()
   async allProduct() {
     return await this.productService.allProduct();
@@ -21,13 +16,4 @@ export class ProductController {
     return this.productService.getProuctById(id);
   }
 
-  @Patch(':id')
-  updateProduct(@Param('id') id: string, @Body() dto: updateProductDto) {
-    return this.productService.updateProduct(id, dto);
-  }
-
-  @Delete(':id')
-  async deleteProduct(@Param('id') id: string) {
-    return this.productService.deleteProduct(id);
-  }
 }

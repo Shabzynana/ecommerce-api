@@ -14,10 +14,11 @@ import { Address } from 'src/address/entities/address.entity';
 import { Token } from 'src/token/entities/token.entity';
 import { CategoryService } from 'src/category/category.service';
 import { Category } from 'src/category/entities/category.entity';
+import { ProductService } from 'src/product/product.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order, OrderItem, User, Cart, CartItem, Product, Address, Token, Category])],
   controllers: [AdminController],
-  providers: [AdminService, OrderService, UserService, CartService, AddressService, CategoryService],
+  providers: [AdminService, OrderService, UserService, CartService, AddressService, CategoryService, ProductService],
 })
 export class AdminModule {}
