@@ -6,11 +6,6 @@ import { CategoryDto, updateCategoryDto } from './dto/category.dto';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Post()
-  async createCategory(@Body() dto: CategoryDto) {
-    return await this.categoryService.createCategory(dto);
-  }
-
   @Get()
   async allCategories() {
     return await this.categoryService.allCategories();
