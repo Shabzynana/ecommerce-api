@@ -8,6 +8,7 @@ import { updateOrderStatusDto } from 'src/order/dto/order.dto';
 import { OrderService } from 'src/order/order.service';
 import { ProductDto, updateProductDto } from 'src/product/dto/product.dto';
 import { ProductService } from 'src/product/product.service';
+import { UserService } from 'src/user/user.service';
 import { AdminService } from './admin.service';
 import { RolesGuard } from './guards/admin.guard';
 
@@ -20,7 +21,8 @@ export class AdminController {
     private readonly adminService: AdminService,
     private readonly orderService: OrderService,
     private readonly categoryService: CategoryService,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly userService: UserService
     ) {}
   
   @ApiOperation({ summary: 'Create category' })
@@ -69,6 +71,18 @@ export class AdminController {
   @Get('order/orders')
   async getAllOrders() {
     return this.orderService.getAllOrders();
+  }
+   
+  @ApiOperation({ summary: 'Get all users' })
+  @Get('user/users')
+  async getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
+  @ApiOperation({ summary: 'Delete user' })
+  @Delete('user/delete/:id')
+  async deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUser(id);
   }
 
 }
