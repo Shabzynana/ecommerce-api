@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressService } from 'src/address/address.service';
 import { AppUtilities } from 'src/app.utilities';
 import { CartService } from 'src/cart/cart.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { CreateOrderDto } from './dto/order.dto';
+import { CreateOrderDto, updateOrderStatusDto } from './dto/order.dto';
 import { Order, OrderItem, OrderStatus } from './entities/order.entity';
 
 @Injectable()
@@ -111,6 +111,30 @@ export class OrderService {
     return order;
   }
 
+  async cancelOrder(id: string, userId: string) {
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const order = await this.getOrderById(id);
+    if (order.user.id !== user.id) {
+      throw new ForbiddenException('You are not authorized to cancel this order');
+    }
+    order.status = OrderStatus.CANCELLED;
+    return this.orderRepository.save(order);
+  }
+
+  async updateOrderStatus(id: string, dto: updateOrderStatusDto) {
+    const order = await this.getOrderById(id);
+    order.status = dto.status as OrderStatus;
+    return this.orderRepository.save(order);
+  }
+
+  async getAllOrders() {
+    return this.orderRepository.find({
+      relations: ['orderItems', 'orderItems.product', 'shippingAddress', 'payments', 'user'],
+    });
+  }
+
   
- 
 }

@@ -15,6 +15,7 @@ import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 import { SeedModule } from './database/seeding/seeding.module';
 import { AddressModule } from './address/address.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AddressModule } from './address/address.module';
     OrderModule,
     PaymentModule,
     AddressModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],

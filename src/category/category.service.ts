@@ -12,7 +12,10 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
   async createCategory(dto: CategoryDto) {
-
+    const existing = await this.getCategoryByName(dto.name);
+    if (existing) {
+      throw new BadRequestException('Category name already exists.');
+    }
     const category = await this.categoryRepository.create(dto);
     return await this.categoryRepository.save(category);
   }

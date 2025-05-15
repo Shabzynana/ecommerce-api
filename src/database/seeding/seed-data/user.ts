@@ -4,7 +4,6 @@ export const userSeedData = [
         last_name: 'admin',
         email: 'admin@admin.com',
         password: 'password',
-        role: 'admin',
         is_verified: true,
         is_verified_date: new Date()
     },
@@ -13,7 +12,6 @@ export const userSeedData = [
         last_name: 'admin1',
         email: 'admin1@admin.com',
         password: 'password',
-        role: 'admin',
         is_verified: true,
         is_verified_date: new Date()
     },
@@ -22,7 +20,6 @@ export const userSeedData = [
         last_name: 'admin2',
         email: 'admin2@admin.com',
         password: 'password',
-        role: 'admin',
         is_verified: true,
         is_verified_date: new Date()
     },
@@ -31,7 +28,6 @@ export const userSeedData = [
         last_name: 'admin3',
         email: 'admin3@admin.com',
         password: 'password',
-        role: 'admin',
         is_verified: true,
         is_verified_date: new Date()
     },
@@ -40,7 +36,6 @@ export const userSeedData = [
         last_name: 'admin4',
         email: 'admin4@admin.com',
         password: 'password',
-        role: 'admin',
         is_verified: true,
         is_verified_date: new Date()
     }

@@ -11,3 +11,9 @@ export class CreateOrderDto {
     @IsUUID()
     addressId: string;
 }
+
+export class updateOrderStatusDto {
+    @IsNotEmpty()
+    @IsString()
+    status: string;
+  }
