@@ -1,5 +1,3 @@
-# Create a standard README.md file with the previously provided content.
-
 readme_content = """
 # 🛒 Ecommerce API
 
@@ -28,28 +26,12 @@ A scalable and secure RESTful API for an eCommerce application built with **Type
 - **Testing**: Postman (or Jest if test suite is added)
 - **Version Control**: Git
 
-## 📁 Project Structure
-
-\`\`\`
-src/
-│
-├── controllers/        # Route handlers
-├── services/           # Business logic
-├── routes/             # API route definitions
-├── entities/           # TypeORM entity definitions
-├── middlewares/        # Custom middleware (auth, error handling, etc.)
-├── utils/              # Helper functions
-├── config/             # Database and environment config
-├── app.ts              # Express app setup
-└── server.ts           # App entry point
-\`\`\`
-
 ## ⚙️ Installation & Setup
 
 1. **Clone the repository:**
 
 \`\`\`bash
-git clone https://github.com/your-username/ecommerce-api.git
+git clone https://github.com/Shabzynana/ecommerce-api.git
 cd ecommerce-api
 \`\`\`
 
@@ -150,7 +132,7 @@ Sample Postman collection available here: [TODO: Add link]
 
 ## 🧑‍💻 Author
 
-**Your Name**  
+Adebiyi Oluwafemi Olamilekan
 Junior Backend Developer  
 [LinkedIn](https://www.linkedin.com/in/your-profile) | [Portfolio](https://your-portfolio.com)
 
