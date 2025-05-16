@@ -14,6 +14,13 @@ A scalable and secure RESTful API for an eCommerce application built with **Type
 - PostgreSQL database integration with TypeORM
 - Modular and maintainable project structure
 
+### Technical Highlights
+- Asynchronous email notifications using job queues
+- Clean architecture with modular design
+- Comprehensive test coverage with Jest
+- API documentation with Swagger/OpenAPI
+- Docker containerization for easy deployment
+
 ## 🧱 Tech Stack
 
 - **Backend**: Node.js, TypeScript
@@ -21,57 +28,67 @@ A scalable and secure RESTful API for an eCommerce application built with **Type
 - **ORM**: TypeORM
 - **Database**: PostgreSQL (can be swapped)
 - **Authentication**: JWT (JSON Web Tokens), bcrypt for password hashing
-- **Queues & Messaging**: Redis, Bullmq
+- **Queue System**: Redis, Bullmq
 - **Validation**: class-validator
 - **Environment Management**: dotenv
 - **API Documentation & Testing**: Swagger (OpenAPI), Postman
 - **Version Control**: Git
 - **Containerization**: Docker
 
-## ⚙️ Installation & Setup
+## 📋 Prerequisites
 
-1. **Clone the repository:**
+- Node.js (v16 or higher)
+- PostgreSQL
+- Docker (optional)
+- npm or yarn
+ 
+## 🔧 Installation
 
-\`\`\`bash
-git clone https://github.com/Shabzynana/ecommerce-api.git
+1. Clone the repository
+```bash
+git clone https://github.com/shabzynana/ecommerce-api.git
 cd ecommerce-api
-\`\`\`
+```
 
-2. **Install dependencies:**
-
-\`\`\`bash
+2. Install dependencies
+```bash
 yarn install
-# or
-npm install
-\`\`\`
+```
 
-3. **Configure environment variables:**
+3. Set up environment variables
+```bash
+cp .env.example .env
+# Edit .env with your database credentials and other configurations
+```
 
-Create a `.env` file in the root and add:
+4. Run database migrations
+```bash
+yarn migration:create
+yarn migration:generate
+yarn migration:run
+```
 
-\`\`\`env
-PORT=5000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=ecommerce_db
-JWT_SECRET=your_jwt_secret
-\`\`\`
+5. Start the development server
+```bash
+npm run start:dev
+```
 
-4. **Run migrations / sync database:**
+## 🐳 Docker Setup
 
-\`\`\`bash
-yarn typeorm migration:run
-# or if using sync:
-yarn dev
-\`\`\`
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
 
-5. **Start the development server:**
+# Or build the image manually
+docker build -t ecommerce-api .
+docker run -p 3000:3000 ecommerce-api
+```
 
-\`\`\`bash
-yarn dev
-\`\`\`
+## 📚 API Documentation
+
+Once the server is running, visit:
+- Swagger UI: `http://localhost:3000/api/docs`
+- OpenAPI JSON: `http://localhost:3000/api/docs-json`
 
 ## 📌 API Endpoints Overview
 
