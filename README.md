@@ -90,47 +90,50 @@ Once the server is running, visit:
 - Swagger UI: `http://localhost:3000/api/docs`
 - OpenAPI JSON: `http://localhost:3000/api/docs-json`
 
-## 📌 API Endpoints Overview
+## 🔐 Security Features
 
-### Auth
+- JWT tokens with expiration
+- Password hashing with bcrypt
+- Input validation and sanitization
+- SQL injection prevention via TypeORM
+- Role-based route protection
+- Ownership validation for user-specific resources
 
-- \`POST /api/auth/register\` - Register a new user
-- \`POST /api/auth/login\` - Login and receive JWT
+## 🚦 API Endpoints
+
+### Authentication
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/refresh` - Refresh access token
+- `POST /auth/logout` - Logout user
 
 ### Products
-
-- \`GET /api/products\` - List all products
-- \`POST /api/products\` - Add new product *(Admin only)*
-- \`GET /api/products/:id\` - Get single product
-- \`PUT /api/products/:id\` - Update product *(Admin only)*
-- \`DELETE /api/products/:id\` - Delete product *(Admin only)*
+- `GET /products` - List all products
+- `GET /products/:id` - Get product details
+- `POST /products` - Create product (Admin only)
+- `PUT /products/:id` - Update product (Admin only)
+- `DELETE /products/:id` - Delete product (Admin only)
 
 ### Cart
-
-- \`GET /api/cart\` - Get current user's cart
-- \`POST /api/cart\` - Add product to cart
-- \`PUT /api/cart/:itemId\` - Update quantity
-- \`DELETE /api/cart/:itemId\` - Remove item
+- `GET /cart` - Get user's cart
+- `POST /cart/items` - Add item to cart
+- `PUT /cart/items/:id` - Update cart item
+- `DELETE /cart/items/:id` - Remove from cart
 
 ### Orders
+- `GET /orders` - Get user's orders
+- `GET /orders/:id` - Get order details
+- `POST /orders` - Create order from cart
+- `PUT /orders/:id/status` - Update order status (Admin only)
 
-- \`POST /api/orders\` - Place order
-- \`GET /api/orders\` - View all orders (user)
-- \`GET /api/orders/:id\` - View order by ID
+## 🤝 Contributing
 
-## 🔐 Authentication
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-This project uses **JWT (JSON Web Tokens)** for authentication. Authenticated users must pass the token in the \`Authorization\` header as:
-
-\`\`\`
-Authorization: Bearer <token>
-\`\`\`
-
-## 🧪 Testing
-
-You can test the endpoints using tools like **Postman** or **Thunder Client**.
-
-Sample Postman collection available here: [TODO: Add link]
 
 ## 🧼 Code Quality
 
@@ -142,12 +145,9 @@ Sample Postman collection available here: [TODO: Add link]
 
 ## 📈 Future Improvements
 
-- Add product categories and filtering
-- Implement payment gateway integration
 - Order status tracking (shipped, delivered, etc.)
 - Admin dashboard and analytics
 - Unit & integration testing with Jest and Supertest
-- Dockerize the project for deployment
 
 ## 🧑‍💻 Author
 
