@@ -1,4 +1,3 @@
-readme_content = """
 # 🛒 Ecommerce API
 
 A scalable and secure RESTful API for an eCommerce application built with **TypeScript**, **Express**, and **TypeORM**. This backend handles core functionalities such as user authentication, product management, shopping cart, order processing, and more.
@@ -17,14 +16,17 @@ A scalable and secure RESTful API for an eCommerce application built with **Type
 
 ## 🧱 Tech Stack
 
-- **Backend**: Node.js, Express, TypeScript
+- **Backend**: Node.js, TypeScript
+- **Framework**: NestJS
 - **ORM**: TypeORM
 - **Database**: PostgreSQL (can be swapped)
 - **Authentication**: JWT (JSON Web Tokens), bcrypt for password hashing
+- **Queues & Messaging**: Redis, Bullmq
 - **Validation**: class-validator
 - **Environment Management**: dotenv
-- **Testing**: Postman (or Jest if test suite is added)
+- **API Documentation & Testing**: Swagger (OpenAPI), Postman
 - **Version Control**: Git
+- **Containerization**: Docker
 
 ## ⚙️ Installation & Setup
 
