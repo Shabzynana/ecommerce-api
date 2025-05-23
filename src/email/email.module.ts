@@ -16,7 +16,7 @@ import { Token } from 'src/token/entities/token.entity';
         transport: {
           host: config.get('SMTP_HOST'),
           port: config.get('SMTP_PORT'),
-          secure: true,
+          secure: false,
           auth: {
             user: config.get('SMTP_USER'),
             pass: config.get('SMTP_PASSWORD'),
