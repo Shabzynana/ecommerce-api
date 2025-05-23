@@ -14,6 +14,13 @@ A scalable and secure RESTful API for an eCommerce application built with **Type
 - PostgreSQL database integration with TypeORM
 - Modular and maintainable project structure
 
+### Technical Highlights
+- Asynchronous email notifications using job queues
+- Clean architecture with modular design
+- Comprehensive test coverage with Jest
+- API documentation with Swagger/OpenAPI
+- Docker containerization for easy deployment
+
 ## 🧱 Tech Stack
 
 - **Backend**: Node.js, TypeScript
@@ -21,99 +28,112 @@ A scalable and secure RESTful API for an eCommerce application built with **Type
 - **ORM**: TypeORM
 - **Database**: PostgreSQL (can be swapped)
 - **Authentication**: JWT (JSON Web Tokens), bcrypt for password hashing
-- **Queues & Messaging**: Redis, Bullmq
+- **Queue System**: Redis, Bullmq
 - **Validation**: class-validator
 - **Environment Management**: dotenv
 - **API Documentation & Testing**: Swagger (OpenAPI), Postman
 - **Version Control**: Git
 - **Containerization**: Docker
 
-## ⚙️ Installation & Setup
+## 📋 Prerequisites
 
-1. **Clone the repository:**
+- Node.js (v16 or higher)
+- PostgreSQL
+- Docker (optional)
+- npm or yarn
+ 
+## 🔧 Installation
 
-\`\`\`bash
-git clone https://github.com/Shabzynana/ecommerce-api.git
+1. Clone the repository
+```bash
+git clone https://github.com/shabzynana/ecommerce-api.git
 cd ecommerce-api
-\`\`\`
+```
 
-2. **Install dependencies:**
-
-\`\`\`bash
+2. Install dependencies
+```bash
 yarn install
-# or
-npm install
-\`\`\`
+```
 
-3. **Configure environment variables:**
+3. Set up environment variables
+```bash
+cp .env.example .env
+# Edit .env with your database credentials and other configurations
+```
 
-Create a `.env` file in the root and add:
+4. Run database migrations
+```bash
+yarn migration:create
+yarn migration:generate
+yarn migration:run
+```
 
-\`\`\`env
-PORT=5000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=ecommerce_db
-JWT_SECRET=your_jwt_secret
-\`\`\`
+5. Start the development server
+```bash
+npm run start:dev
+```
 
-4. **Run migrations / sync database:**
+## 🐳 Docker Setup
 
-\`\`\`bash
-yarn typeorm migration:run
-# or if using sync:
-yarn dev
-\`\`\`
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
 
-5. **Start the development server:**
+# Or build the image manually
+docker build -t ecommerce-api .
+docker run -p 3000:3000 ecommerce-api
+```
 
-\`\`\`bash
-yarn dev
-\`\`\`
+## 📚 API Documentation
 
-## 📌 API Endpoints Overview
+Once the server is running, visit:
+- Swagger UI: `http://localhost:3000/api/docs`
+- OpenAPI JSON: `http://localhost:3000/api/docs-json`
 
-### Auth
+## 🔐 Security Features
 
-- \`POST /api/auth/register\` - Register a new user
-- \`POST /api/auth/login\` - Login and receive JWT
+- JWT tokens with expiration
+- Password hashing with bcrypt
+- Input validation and sanitization
+- SQL injection prevention via TypeORM
+- Role-based route protection
+- Ownership validation for user-specific resources
+
+## 🚦 API Endpoints
+
+### Authentication
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/refresh` - Refresh access token
+- `POST /auth/logout` - Logout user
 
 ### Products
-
-- \`GET /api/products\` - List all products
-- \`POST /api/products\` - Add new product *(Admin only)*
-- \`GET /api/products/:id\` - Get single product
-- \`PUT /api/products/:id\` - Update product *(Admin only)*
-- \`DELETE /api/products/:id\` - Delete product *(Admin only)*
+- `GET /products` - List all products
+- `GET /products/:id` - Get product details
+- `POST /products` - Create product (Admin only)
+- `PUT /products/:id` - Update product (Admin only)
+- `DELETE /products/:id` - Delete product (Admin only)
 
 ### Cart
-
-- \`GET /api/cart\` - Get current user's cart
-- \`POST /api/cart\` - Add product to cart
-- \`PUT /api/cart/:itemId\` - Update quantity
-- \`DELETE /api/cart/:itemId\` - Remove item
+- `GET /cart` - Get user's cart
+- `POST /cart/items` - Add item to cart
+- `PUT /cart/items/:id` - Update cart item
+- `DELETE /cart/items/:id` - Remove from cart
 
 ### Orders
+- `GET /orders` - Get user's orders
+- `GET /orders/:id` - Get order details
+- `POST /orders` - Create order from cart
+- `PUT /orders/:id/status` - Update order status (Admin only)
 
-- \`POST /api/orders\` - Place order
-- \`GET /api/orders\` - View all orders (user)
-- \`GET /api/orders/:id\` - View order by ID
+## 🤝 Contributing
 
-## 🔐 Authentication
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-This project uses **JWT (JSON Web Tokens)** for authentication. Authenticated users must pass the token in the \`Authorization\` header as:
-
-\`\`\`
-Authorization: Bearer <token>
-\`\`\`
-
-## 🧪 Testing
-
-You can test the endpoints using tools like **Postman** or **Thunder Client**.
-
-Sample Postman collection available here: [TODO: Add link]
 
 ## 🧼 Code Quality
 
@@ -125,12 +145,9 @@ Sample Postman collection available here: [TODO: Add link]
 
 ## 📈 Future Improvements
 
-- Add product categories and filtering
-- Implement payment gateway integration
 - Order status tracking (shipped, delivered, etc.)
 - Admin dashboard and analytics
 - Unit & integration testing with Jest and Supertest
-- Dockerize the project for deployment
 
 ## 🧑‍💻 Author
 
