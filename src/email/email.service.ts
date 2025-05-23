@@ -19,9 +19,10 @@ export class EmailService {
 
     private prepMailContent(filePath: string) {
         return AppUtilities.readFile(`${this.basePath}/templates/${filePath}`);
-    }    
+    }
 
     async sendConfirmationEmail(user:User) {
+        console.log(process.env.MAIL_FROM, 'mail_from')
         try{
             const token = await this.tokenService.generateConfirmationToken(user.id)
             const confirmUrl = `${process.env.FRONTEND_URL}/auth/login?token=${token.access_token}`;
