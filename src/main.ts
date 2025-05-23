@@ -31,6 +31,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .addServer(`http://127.0.0.1:${process.env.PORT}/`)
+    .addServer('https://staging-ecommerce-api.onrender.com/')
     .addServer('https://ecommerce-api-7v2j.onrender.com/')
     .build();
   const document = SwaggerModule.createDocument(app, config);
