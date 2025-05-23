@@ -105,7 +105,8 @@ Once the server is running, visit:
 - `POST /auth/register` - User registration
 - `POST /auth/login` - User login
 - `POST /auth/refresh` - Refresh access token
-- `POST /auth/logout` - Logout user
+- `DELETE /auth/logout` - Logout user
+- `POST /auth/change-password` - change password
 
 ### Products
 - `GET /products` - List all products
