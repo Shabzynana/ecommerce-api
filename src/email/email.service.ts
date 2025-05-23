@@ -49,6 +49,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('welcomeEmail', {
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Welcome Email',
                 html: htmlContent
@@ -71,6 +72,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('forgotPasswordEmail', {
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Reset Password',
                 html: htmlContent
