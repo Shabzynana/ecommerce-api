@@ -74,7 +74,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('forgotPasswordEmail', {
-                from: "horlarmihleykan10@gmail.com",
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Reset Password',
                 html: htmlContent
