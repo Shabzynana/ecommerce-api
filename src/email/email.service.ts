@@ -32,6 +32,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('confirmEmail', {
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Confirm Email',
                 html: htmlContent
