@@ -67,6 +67,10 @@ export class OrderService {
       throw new NotFoundException('Address not found');
     }
 
+    if (userAddress.user.id !== user.id) {
+      throw new ForbiddenException('You are not authorized to use this address');
+    }
+
     const order = await this.orderRepository.create({
       user : { id : user.id },
       totalAmount: AppUtilities.totalPrice(cart.cartItems),
