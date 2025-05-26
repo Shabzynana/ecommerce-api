@@ -7,7 +7,7 @@ import { PaymentService } from '../payment.service';
 import { OrderService } from 'src/order/order.service';
 import { PaymentMethod, PaymentStatus } from '../entities/payment.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Order } from 'src/order/entities/order.entity';
+import { Order, OrderStatus, PayStatus } from 'src/order/entities/order.entity';
 import { UserService } from 'src/user/user.service';
 import { CreatePaymentDto, CreateTransactionResponseDto, PaystackWebApi, verifyPaymentDto } from './dto/paystack.dto';
 
@@ -104,7 +104,6 @@ export class PaystackService {
     };
 
     const response = await this.fetchPaystackApi(paystackApi);
-    console.log(response, 'response');
     if (response.status === true) {
       payment = await this.paymentService.savePayment({
         reference: response.data.reference,
@@ -124,15 +123,11 @@ export class PaystackService {
     const hash = crypto
       .createHmac('sha512', this.paystackSecretKey)
       .update(JSON.stringify(body))
-      .digest('hex');
-
-    console.log(hash, 'hash');
-    console.log(signature, 'signature');  
+      .digest('hex'); 
 
     if (hash !== signature) {
       throw new HttpException('Invalid signature', HttpStatus.BAD_REQUEST);
     }
-    console.log(body, 'body');
 
     if (body.event === 'charge.success') {
       const payment = await this.paymentService.savePayment({
@@ -143,6 +138,8 @@ export class PaystackService {
         status: body.data.status as PaymentStatus,
         method : body.data.channel as PaymentMethod
       });
+      await this.orderService.updateOrderStatus(payment.order.id, {status: OrderStatus.PROCESSING});
+      await this.orderService.updateOrderPayStatus(payment.order.id, {status: PayStatus.PAID});
 
       return payment;
     }

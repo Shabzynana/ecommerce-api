@@ -16,7 +16,8 @@ export class PaymentService {
   async savePayment(data: Partial<Payment>) {
 
     const existingPayment = await this.paymentRepository.findOne({ 
-      where: { reference: data.reference } 
+      where: { reference: data.reference },
+      relations: ['order']
     })
     if (existingPayment) {
       if (existingPayment.status === PaymentStatus.SUCCESS) {

@@ -6,7 +6,7 @@ import { CartService } from 'src/cart/cart.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { CreateOrderDto, updateOrderStatusDto } from './dto/order.dto';
-import { Order, OrderItem, OrderStatus } from './entities/order.entity';
+import { Order, OrderItem, OrderStatus, PayStatus } from './entities/order.entity';
 
 @Injectable()
 export class OrderService {
@@ -74,7 +74,7 @@ export class OrderService {
     const order = await this.orderRepository.create({
       user : { id : user.id },
       totalAmount: AppUtilities.totalPrice(cart.cartItems),
-      status: OrderStatus.PENDING,
+      orderStatus: OrderStatus.PENDING,
       trackingNumber: await this.generateTrackingNumber(),
       shippingAddress: userAddress      
     });
@@ -124,13 +124,19 @@ export class OrderService {
     if (order.user.id !== user.id) {
       throw new ForbiddenException('You are not authorized to cancel this order');
     }
-    order.status = OrderStatus.CANCELLED;
+    order.orderStatus = OrderStatus.CANCELLED;
     return this.orderRepository.save(order);
   }
 
   async updateOrderStatus(id: string, dto: updateOrderStatusDto) {
     const order = await this.getOrderById(id);
-    order.status = dto.status as OrderStatus;
+    order.orderStatus = dto.status as OrderStatus;
+    return this.orderRepository.save(order);
+  }
+
+  async updateOrderPayStatus(id: string, dto: updateOrderStatusDto) {
+    const order = await this.getOrderById(id);
+    order.payStatus = dto.status as PayStatus;
     return this.orderRepository.save(order);
   }
 
