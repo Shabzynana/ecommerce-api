@@ -14,6 +14,11 @@ export enum OrderStatus {
   CANCELLED = 'cancelled'
 }
 
+export enum PayStatus {
+  UNPAID = 'unpaid',
+  PAID = 'paid'
+}
+
 @Entity('orders')
 export class Order extends AbstractBaseEntity {
 
@@ -25,7 +30,14 @@ export class Order extends AbstractBaseEntity {
     enum: OrderStatus,
     default: OrderStatus.PENDING
   })
-  status: OrderStatus;
+  orderStatus: OrderStatus;
+  
+  @Column({
+    'type': 'enum',
+    enum: PayStatus,
+    default: PayStatus.UNPAID
+  })
+  payStatus: PayStatus;
 
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
