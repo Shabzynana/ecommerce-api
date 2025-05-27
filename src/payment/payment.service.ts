@@ -35,7 +35,7 @@ export class PaymentService {
     return this.paymentRepository.save(newPayment);
   } 
 
-  async handleCardSuccess(data: any) {
+  async handlePaymentSuccess(data: any) {
     const payment = await this.savePayment({
       reference: data.reference,
       transactionId: data.id,
@@ -48,7 +48,7 @@ export class PaymentService {
     await this.orderService.updateOrderPayStatus(payment.order.id, {status: PayStatus.PAID}); 
   }
 
-  async handleCardFailed(data: any) {
+  async handlePaymentIssues(data: any) {
     const payment = await this.savePayment({
       reference: data.reference,
       transactionId: data.id,
@@ -58,4 +58,16 @@ export class PaymentService {
       method : data.channel as PaymentMethod
     });
   }
+  
+  async handeleVerifyPayment(data: any) {
+    const payment = await this.savePayment({
+      reference: data.reference,
+      transactionId: data.id,
+      authorizationCode : data.authorization.authorization_code,
+      amount: Math.round(data.amount / 100),
+      status: data.status as PaymentStatus,
+      method : data.channel as PaymentMethod
+    });
+  }
+
 }

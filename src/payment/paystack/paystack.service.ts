@@ -104,17 +104,25 @@ export class PaystackService {
     };
 
     const response = await this.fetchPaystackApi(paystackApi);
-    console.log('response', response);
-    if (!response.status) throw new HttpException(response.message, HttpStatus.BAD_REQUEST);
-    if (response.status === true) {
-      payment = await this.paymentService.savePayment({
-        reference: response.data.reference,
-        transactionId: response.data.id,
-        authorizationCode : response.data.authorization.authorization_code,
-        amount: Math.round(response.data.amount / 100),
-        status: response.data.status as PaymentStatus,
-        method : response.data.channel as PaymentMethod
-      });
+    payment = response.data.status
+    switch (payment) {
+      case 'success':
+        await this.paymentService.handeleVerifyPayment(response.data);
+        break;
+      case 'failed':
+        await this.paymentService.handeleVerifyPayment(response.data);
+        break;
+      case 'pending':
+        await this.paymentService.handeleVerifyPayment(response.data);
+        break;
+      case 'abandoned':
+        await this.paymentService.handeleVerifyPayment(response.data);
+        break;
+      case 'reversed':
+        await this.paymentService.handeleVerifyPayment(response.data);
+        break;      
+      default:
+        throw new HttpException(response.message, HttpStatus.BAD_REQUEST);    
     }
 
     return payment;
@@ -130,20 +138,20 @@ export class PaystackService {
     if (hash !== signature) {
       throw new HttpException('Invalid signature', HttpStatus.BAD_REQUEST);
     }
-    console.log('body', body);
     switch (body.event) {
       case 'charge.success':
-        await this.paymentService.handleCardSuccess(body.data);
+        await this.paymentService.handlePaymentSuccess(body.data);
         break;
       case 'charge.failed':
-        await this.paymentService.handleCardFailed(body.data);
+        await this.paymentService.handlePaymentIssues(body.data);
         break;
       default:
         throw new HttpException('Invalid event', HttpStatus.BAD_REQUEST);
     }
 
     return {
-      message: 'success'}
-    }  
+      message: 'success'
+    }
+  }  
 
 }
