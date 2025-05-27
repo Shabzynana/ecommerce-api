@@ -19,9 +19,10 @@ export class EmailService {
 
     private prepMailContent(filePath: string) {
         return AppUtilities.readFile(`${this.basePath}/templates/${filePath}`);
-    }    
+    }
 
     async sendConfirmationEmail(user:User) {
+        console.log(process.env.MAIL_FROM, 'mail_from')
         try{
             const token = await this.tokenService.generateConfirmationToken(user.id)
             const confirmUrl = `${process.env.FRONTEND_URL}/auth/login?token=${token.access_token}`;
@@ -31,6 +32,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('confirmEmail', {
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Confirm Email',
                 html: htmlContent
@@ -49,6 +51,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('welcomeEmail', {
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Welcome Email',
                 html: htmlContent
@@ -71,6 +74,7 @@ export class EmailService {
               .replace('{{username}}', user.last_name);
             
             const job = await this.queueService.addMailToQueue('forgotPasswordEmail', {
+                from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Reset Password',
                 html: htmlContent
