@@ -104,6 +104,8 @@ export class PaystackService {
     };
 
     const response = await this.fetchPaystackApi(paystackApi);
+    console.log('response', response);
+    if (!response.status) throw new HttpException(response.message, HttpStatus.BAD_REQUEST);
     if (response.status === true) {
       payment = await this.paymentService.savePayment({
         reference: response.data.reference,
@@ -128,25 +130,20 @@ export class PaystackService {
     if (hash !== signature) {
       throw new HttpException('Invalid signature', HttpStatus.BAD_REQUEST);
     }
-
-    if (body.event === 'charge.success') {
-      const payment = await this.paymentService.savePayment({
-        reference: body.data.reference,
-        transactionId: body.data.id,
-        authorizationCode : body.data.authorization.authorization_code,
-        amount: Math.round(body.data.amount / 100),
-        status: body.data.status as PaymentStatus,
-        method : body.data.channel as PaymentMethod
-      });
-      await this.orderService.updateOrderStatus(payment.order.id, {status: OrderStatus.PROCESSING});
-      await this.orderService.updateOrderPayStatus(payment.order.id, {status: PayStatus.PAID});
-
-      return payment;
+    console.log('body', body);
+    switch (body.event) {
+      case 'charge.success':
+        await this.paymentService.handleCardSuccess(body.data);
+        break;
+      case 'charge.failed':
+        await this.paymentService.handleCardFailed(body.data);
+        break;
+      default:
+        throw new HttpException('Invalid event', HttpStatus.BAD_REQUEST);
     }
 
-    throw new HttpException('Invalid event', HttpStatus.BAD_REQUEST);
-  }  
+    return {
+      message: 'success'}
+    }  
 
-
- 
 }
