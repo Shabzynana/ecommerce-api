@@ -28,7 +28,8 @@ export class EmailConsumer extends WorkerHost {
 
   private async handleEmail(job: Job) {
     try {
-      await this.mailer.sendMail({   
+      await this.mailer.sendMail({
+        from: job.data.from,
         to: job.data.to,
         subject: job.data.subject,
         html: job.data.html
