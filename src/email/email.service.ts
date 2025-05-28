@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppUtilities } from 'src/app.utilities';
+import { AUTH_MAIL } from 'src/common/constants';
 import { QueueService } from 'src/common/queue/queue.service';
 import { TokenType } from 'src/token/dto/token_type';
 import { TokenService } from 'src/token/token.service';
 import { User } from 'src/user/entities/user.entity';
+const { welcomeMail, confirmMail, passswordChangeMail, forgotPasswordMail} = AUTH_MAIL
 
 @Injectable()
 export class EmailService {
@@ -30,7 +32,7 @@ export class EmailService {
               .replace('{{confirmUrl}}', confirmUrl)
               .replace('{{username}}', user.last_name);
             
-            const job = await this.queueService.addAuthMailToQueue('confirmEmail', {
+            const job = await this.queueService.addAuthMailToQueue(confirmMail, {
                 from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Confirm Email',
@@ -49,7 +51,7 @@ export class EmailService {
             const htmlContent = htmlTemplate
               .replace('{{username}}', user.last_name);
             
-            const job = await this.queueService.addAuthMailToQueue('welcomeEmail', {
+            const job = await this.queueService.addAuthMailToQueue(welcomeMail, {
                 from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Welcome Email',
@@ -72,7 +74,7 @@ export class EmailService {
               .replace('{{resetUrl}}', resetUrl)
               .replace('{{username}}', user.last_name);
             
-            const job = await this.queueService.addAuthMailToQueue('forgotPasswordEmail', {
+            const job = await this.queueService.addAuthMailToQueue(forgotPasswordMail, {
                 from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Reset Password',

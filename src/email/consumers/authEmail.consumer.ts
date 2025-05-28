@@ -1,21 +1,26 @@
 import { Processor, WorkerHost} from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { MailerService } from '@nestjs-modules/mailer';
+import { CONSTANT } from 'src/common/constants';
+import { AUTH_MAIL } from 'src/common/constants';
 
-@Processor('authEmail')
+const { AuthQ } = CONSTANT;
+const { confirmMail, welcomeMail, passswordChangeMail, forgotPasswordMail} = AUTH_MAIL
+
+@Processor(AuthQ)
 export class AuthConsumer extends WorkerHost {
   constructor(private readonly mailer: MailerService) {
     super();
   }
 
   async process(job: Job<any, any, string>): Promise<any> {
-    await this.handleEmail(job, 'authEmail');
+    await this.handleEmail(job, AuthQ);
   }
 
   private async handleEmail(job: Job, queueName: string) {
-    const supportedJobs = ['forgotPasswordEmail', 'confirmEmail', 'welcomeEmail'];
 
-    if (supportedJobs.includes(job.name)) {
+    const validJobs = [confirmMail, welcomeMail, passswordChangeMail, forgotPasswordMail];
+    if (validJobs.includes(job.name)) {
       await this.sendMail(job);
     } else {
       console.warn(`⚠️ [${queueName}] Unhandled job: ${job.name}`);

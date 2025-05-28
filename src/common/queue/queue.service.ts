@@ -1,14 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { CONSTANT } from '../constants';
+const { AuthQ, OrderQ } = CONSTANT;
 
 @Injectable()
 export class QueueService {
   private readonly logger = new Logger(QueueService.name);
 
   constructor(
-    @InjectQueue('authEmail') private readonly sendauthMail: Queue,
-    @InjectQueue('orderEmail') private readonly sendorderMail: Queue
+    @InjectQueue(AuthQ) private readonly sendauthMail: Queue,
+    @InjectQueue(OrderQ) private readonly sendorderMail: Queue
   ) {}
 
   private async addMailToQueue(queue: Queue, type: string, payload: any) {
