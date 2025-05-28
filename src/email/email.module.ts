@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { EmailConsumer } from './email.consumer';
+import { AuthConsumer } from './consumers/authEmail.consumer';
 import { QueueService } from 'src/common/queue/queue.service';
 import { TokenService } from 'src/token/token.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -28,6 +28,6 @@ import { Token } from 'src/token/entities/token.entity';
     TypeOrmModule.forFeature([Token])
   ],
   controllers: [],
-  providers: [EmailService, EmailConsumer, QueueService, TokenService],
+  providers: [EmailService, AuthConsumer, QueueService, TokenService],
 })
 export class EmailModule {}

@@ -30,7 +30,7 @@ export class EmailService {
               .replace('{{confirmUrl}}', confirmUrl)
               .replace('{{username}}', user.last_name);
             
-            const job = await this.queueService.addMailToQueue('confirmEmail', {
+            const job = await this.queueService.addAuthMailToQueue('confirmEmail', {
                 from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Confirm Email',
@@ -49,7 +49,7 @@ export class EmailService {
             const htmlContent = htmlTemplate
               .replace('{{username}}', user.last_name);
             
-            const job = await this.queueService.addMailToQueue('welcomeEmail', {
+            const job = await this.queueService.addAuthMailToQueue('welcomeEmail', {
                 from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Welcome Email',
@@ -72,7 +72,7 @@ export class EmailService {
               .replace('{{resetUrl}}', resetUrl)
               .replace('{{username}}', user.last_name);
             
-            const job = await this.queueService.addMailToQueue('forgotPasswordEmail', {
+            const job = await this.queueService.addAuthMailToQueue('forgotPasswordEmail', {
                 from: process.env.MAIL_FROM,
                 to: user.email,
                 subject: 'Reset Password',

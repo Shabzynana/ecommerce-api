@@ -23,7 +23,9 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
     }),
 
     BullModule.registerQueue(
-      { name: 'mail' },
+      { name: 'authEmail' },
+      { name: 'orderEmail' }
+
     ),
     BullBoardModule.forRootAsync({
       imports: [ConfigModule],
@@ -31,13 +33,17 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
         route: '/queues',
         adapter: ExpressAdapter,
         adapterOptions: {
-          basePath: '/queues' // This will set the base path for you
+          basePath: '/queues'
         }
       }),
       inject: [ConfigService],
     }),
     BullBoardModule.forFeature({
-      name: 'mail',
+      name: 'authEmail',
+      adapter: BullMQAdapter,
+    }),
+    BullBoardModule.forFeature({
+      name: 'orderEmail',
       adapter: BullMQAdapter,
     }),
   ],
