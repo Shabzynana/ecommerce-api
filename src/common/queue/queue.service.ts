@@ -7,13 +7,14 @@ export class QueueService {
   private readonly logger = new Logger(QueueService.name);
 
   constructor(
-    @InjectQueue('mail') private readonly sendMail: Queue
+    @InjectQueue('authEmail') private readonly sendauthMail: Queue,
+    @InjectQueue('orderEmail') private readonly sendorderMail: Queue
   ) {}
 
-  async addMailToQueue(type: string, payload: any) {
+  private async addMailToQueue(queue: Queue, type: string, payload: any) {
     try {
-      const job = await this.sendMail.add(type, payload, {
-        attempts: 1,
+      const job = await queue.add(type, payload, {
+        attempts: 3,
         backoff: 5000,
       });
 
@@ -24,6 +25,15 @@ export class QueueService {
       throw error;
     }
   }
+
+  async addAuthMailToQueue(type: string, payload: any) {
+    return this.addMailToQueue(this.sendauthMail, type, payload);
+  }
+
+  async addOrderMailToQueue(type: string, payload: any) {
+    return this.addMailToQueue(this.sendorderMail, type, payload);
+  }
+
 }
 
 
