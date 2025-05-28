@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { BullBoardModule } from '@bull-board/nestjs';
 import { ExpressAdapter } from '@bull-board/express';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
-
+import { CONSTANT } from 'src/common/constants';
+const { AuthQ, OrderQ } = CONSTANT;
 
 @Global()
 @Module({
@@ -23,8 +23,8 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
     }),
 
     BullModule.registerQueue(
-      { name: 'authEmail' },
-      { name: 'orderEmail' }
+      { name: AuthQ },
+      { name: OrderQ }
 
     ),
     BullBoardModule.forRootAsync({
@@ -39,11 +39,11 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
       inject: [ConfigService],
     }),
     BullBoardModule.forFeature({
-      name: 'authEmail',
+      name: AuthQ,
       adapter: BullMQAdapter,
     }),
     BullBoardModule.forFeature({
-      name: 'orderEmail',
+      name: OrderQ,
       adapter: BullMQAdapter,
     }),
   ],
