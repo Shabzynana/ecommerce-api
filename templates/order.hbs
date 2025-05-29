@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Order Confirmation</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Mulish', sans-serif;">
+
+  <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Order Confirmation</h2>
+
+  <div style="padding: 30px;">
+    <h3 style="font-size: 24px; font-weight: 700;">Hi {{username}},</h3>
+    <p style="font-size: 16px;">Your order has been confirmed. Your order number is {{trackingNumber}}</p>
+    <p style="font-size: 16px;">Thanks for your order! Here are the details:</p>
+
+    <table width="100%" style="border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #f5f5f5;">
+          <th align="left" style="padding: 10px; border-bottom: 1px solid #ddd;">Item</th>
+          <th align="center" style="padding: 10px; border-bottom: 1px solid #ddd;">Quantity</th>
+          <th align="right" style="padding: 10px; border-bottom: 1px solid #ddd;">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each items}}
+          <tr>
+            <td style="padding: 8px;">{{this.product.name}}</td>
+            <td align="center" style="padding: 8px;">{{this.quantity}}</td>
+            <td align="right" style="padding: 8px;">#{{this.price}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <p style="margin-top: 30px;">Total: <strong>#{{total}}</strong></p>
+
+    <p style="margin-top: 30px;">We’ll notify you once your order ships.</p>
+    <p>Thank you for shopping with us!</p>
+  </div>
+
+</body>
+</html>

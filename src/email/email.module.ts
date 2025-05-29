@@ -7,6 +7,7 @@ import { QueueService } from 'src/common/queue/queue.service';
 import { TokenService } from 'src/token/token.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Token } from 'src/token/entities/token.entity';
+import { OrderConsumer } from './consumers/orderEmail.consumer';
 
 
 @Module({
@@ -28,6 +29,6 @@ import { Token } from 'src/token/entities/token.entity';
     TypeOrmModule.forFeature([Token])
   ],
   controllers: [],
-  providers: [EmailService, AuthConsumer, QueueService, TokenService],
+  providers: [EmailService, AuthConsumer, OrderConsumer, QueueService, TokenService],
 })
 export class EmailModule {}
