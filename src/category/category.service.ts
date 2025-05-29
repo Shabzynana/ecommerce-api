@@ -11,6 +11,7 @@ export class CategoryService {
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
   ) {}
+  
   async createCategory(dto: CategoryDto) {
     const existing = await this.getCategoryByName(dto.name);
     if (existing) {

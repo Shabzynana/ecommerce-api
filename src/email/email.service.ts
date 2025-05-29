@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppUtilities } from 'src/app.utilities';
-import { AUTH_MAIL } from 'src/common/constants';
+import { AUTH_MAIL, ORDER_MAIL } from 'src/common/constants';
 import { QueueService } from 'src/common/queue/queue.service';
+import { Order, OrderItem } from 'src/order/entities/order.entity';
 import { TokenType } from 'src/token/dto/token_type';
 import { TokenService } from 'src/token/token.service';
 import { User } from 'src/user/entities/user.entity';
+import * as Handlebars from 'handlebars';
+
 const { welcomeMail, confirmMail, passswordChangeMail, forgotPasswordMail} = AUTH_MAIL
+const { orderPlaced, orderShipped, orderDelivered, orderCancelled } = ORDER_MAIL
 
 @Injectable()
 export class EmailService {
@@ -21,6 +25,12 @@ export class EmailService {
 
     private prepMailContent(filePath: string) {
         return AppUtilities.readFile(`${this.basePath}/templates/${filePath}`);
+    }
+
+    private prepMailContentForHbs(filePath: string, data:any) {
+        const source = AppUtilities.readFile(`${this.basePath}/templates/${filePath}`);
+        const template = Handlebars.compile(source);
+        return template(data);
     }
 
     async sendConfirmationEmail(user:User) {
@@ -84,7 +94,29 @@ export class EmailService {
         } catch (err) {
             console.log(err, 'err')
         }
-    }    
-         
+    }
+    
+    async sendUserOrderEmail(user:User, order:Order, orderItems: OrderItem[]) {
+        try {
+            const htmlContent = this.prepMailContentForHbs('order.hbs',
+              {
+                username: user.last_name,
+                trackingNumber: order.trackingNumber,
+                items: orderItems,
+                total: order.totalAmount
+              }
+            );
+            
+            const job = await this.queueService.addOrderMailToQueue(orderPlaced, {
+                from: process.env.MAIL_FROM,
+                to: user.email,
+                subject: 'Order Confirmation',
+                html: htmlContent
+            })
+            console.log('Email added', job)
+        } catch (err) {
+            console.log(err, 'err')
+        }    
+    }     
 
 }

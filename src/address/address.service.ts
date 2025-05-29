@@ -13,6 +13,7 @@ export class AddressService {
     private addressRepository: Repository<Address>,
     private userService: UserService
   ) {}
+
   async createAddress(userId: string,dto: CreateAddressDto) {
 
     const userExists = await this.userService.getUserById(userId);
@@ -38,14 +39,18 @@ export class AddressService {
   }
 
   async getAddressById(id: string) {
-
     const address = await this.addressRepository.findOne({
       where: {id: id},
       relations: ['user'],
+      select: {
+        user: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true
+        }
+      }
     });
-    if (!address) {
-      throw new NotFoundException('Address not found');
-    }
     return address;
   }
 

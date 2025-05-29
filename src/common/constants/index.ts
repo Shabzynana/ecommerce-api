@@ -15,3 +15,10 @@ export const AUTH_MAIL = {
   forgotPasswordMail: 'Reset Password',
 };
 
+export const ORDER_MAIL = {
+  orderPlaced: 'Order Placed',
+  orderShipped: 'Order Shipped',
+  orderDelivered: 'Order Delivered',
+  orderCancelled: 'Order Cancelled',
+}
+

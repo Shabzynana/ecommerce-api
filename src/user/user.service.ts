@@ -21,11 +21,30 @@ export class UserService {
   }
 
   async getAllUsers() {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      select: {
+        id: true,
+        first_name: true, 
+        last_name: true,
+        email: true,
+        role: true,
+        is_verified: true
+      }
+    });
   }
 
   public async getUserById(id: string) {
-    const user = await this.userRepository.findOne({ where: { id : id } });
+    const user = await this.userRepository.findOne({ 
+      where: { id : id },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        role: true,
+        is_verified: true
+      } 
+    });
     return user;
   }
 
