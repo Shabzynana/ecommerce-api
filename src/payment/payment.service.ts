@@ -59,7 +59,7 @@ export class PaymentService {
     });
   }
   
-  async handeleVerifyPayment(data: any) {
+  async handleVerifyPayment(data: any) {
     const payment = await this.savePayment({
       reference: data.reference,
       transactionId: data.id,

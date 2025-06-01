@@ -105,24 +105,12 @@ export class PaystackService {
 
     const response = await this.fetchPaystackApi(paystackApi);
     payment = response.data.status
-    switch (payment) {
-      case 'success':
-        await this.paymentService.handeleVerifyPayment(response.data);
-        break;
-      case 'failed':
-        await this.paymentService.handeleVerifyPayment(response.data);
-        break;
-      case 'pending':
-        await this.paymentService.handeleVerifyPayment(response.data);
-        break;
-      case 'abandoned':
-        await this.paymentService.handeleVerifyPayment(response.data);
-        break;
-      case 'reversed':
-        await this.paymentService.handeleVerifyPayment(response.data);
-        break;      
-      default:
-        throw new HttpException(response.message, HttpStatus.BAD_REQUEST);    
+
+    const validStatus = ['success', 'failed', 'pending', 'abandoned', 'reversed'];
+    if (validStatus.includes(payment)) {
+      await this.paymentService.handleVerifyPayment(response.data);
+    } else {
+      throw new HttpException(response.message, HttpStatus.BAD_REQUEST);
     }
 
     return payment;
